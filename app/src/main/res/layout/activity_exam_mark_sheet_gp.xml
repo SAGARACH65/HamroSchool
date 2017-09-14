@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.hamroschool.activitypages.ExamMarkSheetGPA">
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/tool_bar" />
+
+
+    <TableRow
+
+        android:id="@+id/info_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/toolbar"
+        android:background="@color/colorPrimary"
+
+
+        >
+
+        <TextView
+            android:id="@+id/SN"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/SN"
+            android:textColor="#fff" />
+
+        <TextView
+            android:id="@+id/subjects"
+            android:layout_width="250dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/subjects"
+            android:textColor="#fff" />
+
+
+        <TextView
+            android:id="@+id/gpa"
+            android:layout_width="70dp"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="@string/gpa"
+            android:textColor="#fff" />
+
+
+    </TableRow>
+
+    <ScrollView
+        android:id="@+id/scrollview"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:layout_below="@id/info_bar">
+
+        <TableLayout
+            android:id="@+id/main_table"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:layout_marginStart="4dp">
+
+        </TableLayout>
+
+
+    </ScrollView>
+
+    <TextView
+        android:id="@+id/GPA"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/scrollview"
+        android:layout_marginTop="5dp"
+        android:gravity="start"
+        android:text="@string/cgpa"
+        android:textColor="#000000"
+        android:textSize="20sp" />
+
+    <TextView
+        android:id="@+id/percentage_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/GPA"
+        android:layout_alignTop="@+id/GPA"
+        android:textColor="#000000"
+
+        android:textSize="15sp" />
+
+    <TextView
+        android:id="@+id/comment"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/GPA"
+        android:gravity="start"
+        android:text="@string/comment"
+        android:textColor="#000000"
+        android:textSize="20sp" />
+
+
+    <TextView
+        android:id="@+id/comment_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/percentage_value"
+        android:layout_toEndOf="@+id/comment"
+        android:textColor="#000000"
+        android:textSize="15sp" />
+
+
+</RelativeLayout>

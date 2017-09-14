@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.hamroschool.activitypages">
+
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/school"
+        android:label="@string/app_name"
+        android:roundIcon="@drawable/school"
+        android:supportsRtl="true"
+        android:theme="@style/AppMaterialTheme">
+        <activity android:name=".LoginChecker">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".LoginPage"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize" />
+        <!--  -->
+
+        <activity
+            android:name=".Exams"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Profile"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".FeeRecord"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AttendenceRecord"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Notices"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ConnectToTeachers"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ExamMarksSheetPercentage"
+            android:screenOrientation="portrait" />
+
+        <service
+            android:name="service.PollService"
+            android:exported="false" />
+
+        <activity android:name=".ShowMessage">
+            android:screenOrientation="portrait"
+        </activity>
+        <activity android:name=".TeacherAttendence" />
+        <activity android:name=".ExamMarkSheetGPA"></activity>
+    </application>
+
+</manifest>

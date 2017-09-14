@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="width">85dp</dimen>
+    <dimen name="padd">4dp</dimen>
+    <dimen name="width1">110dp</dimen>
+    <dimen name="width2">140dp</dimen>
+        <dimen name="textsize">15sp</dimen>
+    <dimen name="height">45dp</dimen>
+    <dimen name="sn">26dp</dimen>
+    <dimen name="subjects">125dp</dimen>
+    <dimen name="full_marks">75dp</dimen>
+    <dimen name="pass_marks">75dp</dimen>
+    <dimen name="marks_obtained">70dp</dimen>
+
+    <!--
+    for fee record
+    -->
+    <dimen name="classes">42dp</dimen>
+    <dimen name="particulars">85dp</dimen>
+    <dimen name="amount">75dp</dimen>
+    <dimen name="date">90dp</dimen>
+    <dimen name="month">85dp</dimen>
+
+    <dimen name="publish_date_notice">94dp</dimen>
+    <dimen name="title">150dp</dimen>
+    <dimen name="norice_type">120dp</dimen>
+<!--  for attendance-->
+<dimen name="date_of_attendance">210dp</dimen>
+    <dimen name="att_status">150dp</dimen>
+
+    <!--profile-->
+    <dimen name="profilewidth">195dp</dimen>
+    <dimen name="heightprofile">35dp</dimen>
+    <dimen name="paddingstart">5dp</dimen>
+</resources>

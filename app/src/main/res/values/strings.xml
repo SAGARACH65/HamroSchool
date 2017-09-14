@@ -1,0 +1,87 @@
+<resources>
+    <string name="app_name">Hamro School</string>
+
+    <string name="Exams">EXAMS</string>
+    <string name="profile">PROFILE</string>
+    <string name="fee_record">FEE RECORD</string>
+    <string name="attendence_record">ATTENDANCE RECORD</string>
+    <string name="classmates">CLASSMATES</string>
+    <string name="notice">NOTICES</string>
+    <string name="connect_to_teacher">CONNECT TO TEACHERS</string>
+    <string name="username">User Name</string>
+    <string name="password">Password</string>
+    <string name="login">LOGIN</string>
+    <string name="logout">Logout</string>
+    <string name="authenticating">Authenticating Please Wait....</string>
+    <string name="profile_school">Profile In School Record</string>
+
+
+    <!--For Profile-->
+    <string name="Student_Name">Student\'s Name:</string>
+    <string name="dob">Date of Birth:</string>
+    <string name="mothers_name">Mother\'s Name:</string>
+    <string name="father_name">Father\'s Name:</string>
+    <string name="address">Address:</string>
+    <string name="email">Student\'s Email:</string>
+
+    <string name="roll_no">Roll No:</string>
+    <string name="Grade">Grade:</string>
+    <string name="blood">Blood Group:</string>
+    <string name="login_email">Login Email:</string>
+    <string name="contact_no_parents">Contact No:</string>
+    <string name="school_id">School ID:</string>
+
+
+    <!-- FEE Record-->
+    <string name="present_class">Class</string>
+    <string name="particulars">Particulars</string>
+    <string name="amount">Amount</string>
+    <string name="date">Date</string>
+    <string name="month">Month</string>
+
+    <!-- connect to teachers-->
+    <string name="subject">Subject</string>
+    <string name="teacher">Teacher</string>
+    <string name="contact_no">Contact No</string>
+    <string name="email_string">Email</string>
+
+    <!--Exams-->
+    <string name="Class">Class</string>
+    <string name="exam_type">Exam Type</string>
+    <string name="date_of_exam">Date</string>
+    <string name="controls">Controls</string>
+
+    <!--marks sheet-->
+    <string name="SN">SN</string>
+    <string name="subjects">Subject</string>
+    <string name="fullmarks">Full Marks</string>
+    <string name="passmarks">Pass Marks</string>
+    <string name="marks_obtained">Marks Scored</string>
+
+
+    <string name="per">Percentage:</string>
+    <string name="result">Result:</string>
+
+
+    <!--Notices-->
+    <string name="publish_date">Published On</string>
+    <string name="titile_notice">Title</string>
+    <string name="notice_type">Notice Type</string>
+    <string name="view">View</string>
+
+    <string name="marksheet">Mark Sheet</string>
+
+    <string name="comment">Comment:</string>
+
+    <string name="pass">Pass</string>
+    <string name="fail">Fail</string>
+
+
+    <!--for teachers attendance>-->
+    <string name="roll">Roll No:</string>
+    <string name="present">Present</string>
+    <string name="abscent">Abscent</string>
+
+    <string name="cgpa">CGPA:</string>
+    <string name="gpa">GPA</string>
+</resources>
