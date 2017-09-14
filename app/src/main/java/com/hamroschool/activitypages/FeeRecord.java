@@ -31,6 +31,7 @@ import utility.Utility;
 public class FeeRecord extends AppCompatActivity {
     private static final String PREF_NAME = "LOGIN_PREF";
     private static final String PREF_NAME_ADS_SYNCED = "HAS_ADS_SYNCED";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -136,7 +137,7 @@ public class FeeRecord extends AppCompatActivity {
         //showing ads
         SharedPreferences settings = getSharedPreferences(PREF_NAME_ADS_SYNCED, 0);
         boolean has_ads_synced = settings.getBoolean("hasSynced", false);
-        if(has_ads_synced) {
+        if (has_ads_synced) {
             GetTotalEntriesInDB total = new GetTotalEntriesInDB();
             int no_of_entries = total.getTotalEntries(getApplicationContext());
             SelectWhichAdTOShow select = new SelectWhichAdTOShow();

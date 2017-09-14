@@ -32,4 +32,9 @@
     <dimen name="profilewidth">195dp</dimen>
     <dimen name="heightprofile">35dp</dimen>
     <dimen name="paddingstart">5dp</dimen>
+
+
+    <!--dimes GPA-->
+    <dimen name="subject_GPA">250dp</dimen>
+    <dimen name="gpa">70dp</dimen>
 </resources>

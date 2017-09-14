@@ -17,6 +17,7 @@ import Ads.ShowAds;
 
 public class TeacherAttendence extends AppCompatActivity {
     private static final String PREF_NAME_ADS_SYNCED = "HAS_ADS_SYNCED";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,12 +30,9 @@ public class TeacherAttendence extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-
-
-
         SharedPreferences settings = getSharedPreferences(PREF_NAME_ADS_SYNCED, 0);
         boolean has_ads_synced = settings.getBoolean("hasSynced", false);
-        if(has_ads_synced) {
+        if (has_ads_synced) {
             //showing ads
             GetTotalEntriesInDB total = new GetTotalEntriesInDB();
             int no_of_entries = total.getTotalEntries(getApplicationContext());

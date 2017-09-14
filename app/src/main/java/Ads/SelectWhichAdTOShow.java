@@ -7,10 +7,10 @@ import java.util.Random;
  */
 //this class randomly selects which asd to show
 public class SelectWhichAdTOShow {
-    public int select_which_ad(int limit){
+    public int select_which_ad(int limit) {
         int max = 1;
         int min = limit;
-        Random rand=new Random();
+        Random rand = new Random();
 
         // nextInt is normally exclusive of the top value,
         // so add 1 to make it inclusive

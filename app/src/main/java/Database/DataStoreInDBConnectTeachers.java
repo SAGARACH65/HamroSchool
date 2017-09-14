@@ -23,7 +23,8 @@ public class DataStoreInDBConnectTeachers {
         SQLiteOpenHelper DataBase = new Database(mContext);
         return DataBase.getWritableDatabase();
     }
-    public void storeTeacherInformation(String subject, String teacher_name, String email,String contact_no,boolean delete_table,boolean notclear) {
+
+    public void storeTeacherInformation(String subject, String teacher_name, String email, String contact_no, boolean delete_table, boolean notclear) {
         SQLiteDatabase db = open();
         if (delete_table) {
             db.delete("teacher_info", null, null);

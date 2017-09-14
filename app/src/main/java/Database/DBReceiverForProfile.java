@@ -14,29 +14,33 @@ import Database.Database;
 public class DBReceiverForProfile {
     private Context mContext;
     private String send;
+
     public DBReceiverForProfile(Context context) {
         this.mContext = context;
     }
+
     private SQLiteDatabase open() {
         SQLiteOpenHelper DataBase = new Database(mContext);
         return DataBase.getReadableDatabase();
     }
+
     //request specifies the data required by the caller
-    public  String getData(String request){
+    public String getData(String request) {
         SQLiteDatabase db = open();
         Cursor cursor = db.query("student_profile",
-                new String[]{"_id", "Student_info", "School_Name","photo_bitmap","result_type"},
+                new String[]{"_id", "Student_info", "School_Name", "photo_bitmap"},
                 null,
                 null, null, null, null
         );
-        send = getDataAccToRequest(cursor,request);
+        send = getDataAccToRequest(cursor, request);
         cursor.close();
         return send;
     }
-    public  byte[] getDataBitmap(){
+
+    public byte[] getDataBitmap() {
         SQLiteDatabase db = open();
         Cursor cursor = db.query("student_profile",
-                new String[]{"_id", "Student_info", "School_Name","photo_bitmap"},
+                new String[]{"_id", "Student_info", "School_Name", "photo_bitmap"},
                 null,
                 null, null, null, null
         );
@@ -46,32 +50,30 @@ public class DBReceiverForProfile {
         return send;
     }
 
-    private  String getDataAccToRequest(Cursor cursor, String request){
-        switch (request){
+    private String getDataAccToRequest(Cursor cursor, String request) {
+        switch (request) {
             case "Students_info":
-                String s=getEntry(cursor,1);
-                return getEntry(cursor,1);
+                String s = getEntry(cursor, 1);
+                return getEntry(cursor, 1);
 
-            case"School_Name":
-                return getEntry(cursor,2);
+            case "School_Name":
+                return getEntry(cursor, 2);
 
-            case"result_type":
-
-                return getEntry(cursor,4);
-                default:
-                    return null;
+            default:
+                return null;
 
         }
     }
-    private String getEntry(Cursor cursor,int column_no){
-        String queried_data=null;
-        if(cursor.moveToFirst()) {
-            do{
-                queried_data=cursor.getString(column_no);
+
+    private String getEntry(Cursor cursor, int column_no) {
+        String queried_data = null;
+        if (cursor.moveToFirst()) {
+            do {
+                queried_data = cursor.getString(column_no);
                 cursor.moveToNext();
 
-            }while(!cursor.isAfterLast());
+            } while (!cursor.isAfterLast());
         }
-        return  queried_data;
+        return queried_data;
     }
 }

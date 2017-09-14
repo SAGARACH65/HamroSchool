@@ -85,7 +85,7 @@ public class HamroSchoolXmlParser {
                     readProfile(parser);
                     break;
                 case "examresult":
-                 readExamResult(parser);
+                    readExamResult(parser);
                     break;
                 case "feesrecord":
                     readFee(parser);
@@ -107,7 +107,6 @@ public class HamroSchoolXmlParser {
         }
         complete_flag = true;
     }
-
 
 
     private void readTeacherRecord(XmlPullParser parser) throws IOException, XmlPullParserException {
@@ -248,7 +247,8 @@ public class HamroSchoolXmlParser {
     }
 
     private void readExamResult(XmlPullParser parser) throws IOException, XmlPullParserException {
-        String grade = null, examtype = null, date = null, marks_sheet = null, full_marks = null, obtained_marks = null, comments = null;
+        String result_type = null, grade = null, examtype = null, date = null,
+                marks_sheet = null, full_marks = null, obtained_marks = null, comments = null, CGPA = null;
         int i = 0;
 
         if (parser.getName().equals("examresult")) {
@@ -261,6 +261,9 @@ public class HamroSchoolXmlParser {
                 tagName = parser.getName();
 
                 while (!tagName.equals("exam")) {
+                    result_type = readText(parser);
+                    parser.next();
+
                     grade = readText(parser);
                     parser.next();
                     parser.next();
@@ -272,14 +275,17 @@ public class HamroSchoolXmlParser {
                     parser.next();
                     parser.next();
                     parser.next();
+                    if (result_type.equals("percentage")) {
+                        full_marks = readText(parser);
+                        parser.next();
 
-
-                    full_marks = readText(parser);
-                    parser.next();
-
-                    obtained_marks = readText(parser);
-                    parser.next();
-
+                        obtained_marks = readText(parser);
+                        parser.next();
+                    } else {
+                        //this is for gpa
+                        full_marks = "0";
+                        obtained_marks = "0";
+                    }
                     date = readText(parser);
                     parser.next();
 
@@ -288,6 +294,13 @@ public class HamroSchoolXmlParser {
 
                     comments = readText(parser);
                     parser.next();
+
+                    if (result_type.equals("percentage")) {
+                        CGPA = "0";
+                    } else {
+                        CGPA = readText(parser);
+                        parser.next();
+                    }
                     tagName = parser.getName();
 
                 }
@@ -295,10 +308,10 @@ public class HamroSchoolXmlParser {
                 tagName = parser.getName();
                 DataStoreInDBExams dbs = new DataStoreInDBExams(mContext);
                 if (i == 0) {
-                    dbs.storeStudenInfo(grade, examtype, date, marks_sheet, full_marks, obtained_marks, comments, true, false);
+                    dbs.storeStudenInfo(result_type, grade, examtype, date, marks_sheet, full_marks, obtained_marks, comments, CGPA, true, false);
                     i++;
                 } else {
-                    dbs.storeStudenInfo(grade, examtype, date, marks_sheet, full_marks, obtained_marks, comments, false, false);
+                    dbs.storeStudenInfo(result_type, grade, examtype, date, marks_sheet, full_marks, obtained_marks, comments, CGPA, false, false);
 
                 }
             }
@@ -309,10 +322,9 @@ public class HamroSchoolXmlParser {
 
     // Processes profile tags in the feed.
     private void readProfile(XmlPullParser parser) throws IOException, XmlPullParserException {
-        String students_info, photo_link, school_name,result_type;
+        String students_info, photo_link, school_name, result_type;
         parser.require(XmlPullParser.START_TAG, ns, "profile");
         parser.next();
-
 
         students_info = readText(parser);
         parser.next();
@@ -321,18 +333,14 @@ public class HamroSchoolXmlParser {
         school_name = readText(parser);
         parser.next();
 
-
         photo_link = readText(parser);
-        ConvertToByteArray cvb= new ConvertToByteArray();
-        byte []byte_array=cvb.getLogoImage(photo_link);
-
-        parser.next();
-        result_type=readText(parser);
+        ConvertToByteArray cvb = new ConvertToByteArray();
+        byte[] byte_array = cvb.getLogoImage(photo_link);
 
         parser.next();
 
         DataStoreInDBProfile dsp = new DataStoreInDBProfile(mContext);
-        dsp.storeStudenInfo(students_info, school_name, byte_array,result_type, true, false);
+        dsp.storeStudenInfo(students_info, school_name, byte_array, true, false);
 
     }
 
@@ -344,30 +352,13 @@ public class HamroSchoolXmlParser {
 
         parser.next();
         String tagName = parser.getName();
-        while (!tagName.equals("attendancerecord")) {
-            parser.next();
-            tagName = parser.getName();
+        attendance_list = readText(parser);
+        parser.next();
+        DataStoreInDBFAttendanceRecord dsp=new DataStoreInDBFAttendanceRecord(mContext);
+        dsp.storeAttendanceRecord(attendance_list, true, false);
 
-            while (!tagName.equals("studentattendance")) {
-                attendance_list = readText(parser);
-                parser.next();
-
-            }
-            parser.next();
-            tagName = parser.getName();
-            DataStoreInDBFAttendanceRecord dsp = new DataStoreInDBFAttendanceRecord(mContext);
-
-            if (i == 0) {
-                dsp.storeAttendanceRecord(attendance_list, true, false);
-                i++;
-            } else {
-                dsp.storeAttendanceRecord(attendance_list, false, false);
-            }
-
-        }
         parser.require(XmlPullParser.END_TAG, ns, "attendancerecord");
     }
-
 
     // For the tags title and summary, extracts their text values.
     private String readText(XmlPullParser parser) throws IOException, XmlPullParserException {

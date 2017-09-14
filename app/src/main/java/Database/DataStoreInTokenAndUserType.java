@@ -24,7 +24,7 @@ public class DataStoreInTokenAndUserType {
         return DataBase.getWritableDatabase();
     }
 
-    public void storeUserNameAndPassword(String token, String user_type,boolean delete_table) {
+    public void storeUserNameAndPassword(String token, String user_type, boolean delete_table) {
         SQLiteDatabase db = open();
 
         if (delete_table) {
@@ -39,14 +39,14 @@ public class DataStoreInTokenAndUserType {
 
     }
 
-    public void storeXML(String received,boolean delete_table,boolean notclear) {
+    public void storeXML(String received, boolean delete_table, boolean notclear) {
         SQLiteDatabase db = open();
         if (delete_table) {
             db.delete("xml_data", null, null);
             db.execSQL("DELETE FROM SQLITE_SEQUENCE WHERE NAME = '" + "xml_data" + "'");
 
         }
-        if(!notclear) {
+        if (!notclear) {
             ContentValues user_data = new ContentValues();
             user_data.put("XML", received);
 

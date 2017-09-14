@@ -36,6 +36,7 @@ import Database.DataStoreInDBFeeRecord;
 import Database.DataStoreInDBProfile;
 import Database.DataStoreInTokenAndUserType;
 import Database.DataStoreInDBrNotices;
+import service.AdChangeCheckerService;
 import service.PollService;
 import utility.Utility;
 
@@ -66,7 +67,10 @@ public class LoginPage extends AppCompatActivity {
 
 
         stopService(new Intent(getApplicationContext(), PollService.class));
+        stopService(new Intent(getApplicationContext(), AdChangeCheckerService.class));
 
+
+        //clearing all the databases to ensure new data is only inserted
         DataStoreInDBExams dbs = new DataStoreInDBExams(getApplicationContext());
         DataStoreInDBConnectTeachers dbc = new DataStoreInDBConnectTeachers(getApplicationContext());
         DataStoreInDBFeeRecord dbf = new DataStoreInDBFeeRecord(getApplicationContext());
@@ -74,14 +78,13 @@ public class LoginPage extends AppCompatActivity {
         DataStoreInDBProfile dbp = new DataStoreInDBProfile(getApplicationContext());
         DataStoreInDBrNotices dbn = new DataStoreInDBrNotices(getApplicationContext());
         DataStoreInTokenAndUserType dunp = new DataStoreInTokenAndUserType(getApplicationContext());
-        dbs.storeStudenInfo(" ", " ", " ", " ", " ", " ", " ", true, true);
+        dbs.storeStudenInfo(" ", " ", " ", " ", " ", " ", " "," ","", true, true);
         dbc.storeTeacherInformation(" ", " ", " ", " ", true, true);
         dbf.storeFeeRecord(" ", " ", " ", " ", " ", true, true);
-        dbp.storeStudenInfo(" ", " ", null, "", true, true);
+        dbp.storeStudenInfo(" ", " ", null, true, true);
         dbn.storeNoticeRecord(" ", " ", " ", " ", true, true);
         dba.storeAttendanceRecord("", true, true);
         dunp.storeXML("", true, true);
-
 
         Button button = (Button) findViewById(R.id.btn_login);
         button.setOnClickListener(new View.OnClickListener() {

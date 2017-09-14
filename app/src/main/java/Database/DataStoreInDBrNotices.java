@@ -22,8 +22,9 @@ public class DataStoreInDBrNotices {
         SQLiteOpenHelper DataBase = new Database(mContext);
         return DataBase.getWritableDatabase();
     }
+
     public void storeNoticeRecord(String title, String message, String pub_date, String notice_type,
-                                boolean delete_table,boolean notclear) {
+                                  boolean delete_table, boolean notclear) {
         SQLiteDatabase db = open();
         if (delete_table) {
             db.delete("notices", null, null);

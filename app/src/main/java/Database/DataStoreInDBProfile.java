@@ -23,7 +23,7 @@ public class DataStoreInDBProfile {
         return DataBase.getWritableDatabase();
     }
 
-    public void storeStudenInfo(String students_info, String school_name, byte[] photo_byte_array, String result_type, boolean delete_table, boolean notclear) {
+    public void storeStudenInfo(String students_info, String school_name, byte[] photo_byte_array, boolean delete_table, boolean notclear) {
 
         SQLiteDatabase db = open();
         if (delete_table) {
@@ -36,11 +36,7 @@ public class DataStoreInDBProfile {
             user_data.put("Student_info", students_info);
             user_data.put("School_Name", school_name);
 
-
             user_data.put("photo_bitmap", photo_byte_array);
-
-            user_data.put("result_type", result_type);
-
 
             db.insert("student_profile", null, user_data);
         }

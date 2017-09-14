@@ -120,7 +120,7 @@ public class Notices extends AppCompatActivity {
         //showing ads
         SharedPreferences settings = getSharedPreferences(PREF_NAME_ADS_SYNCED, 0);
         boolean has_ads_synced = settings.getBoolean("hasSynced", false);
-        if(has_ads_synced) {
+        if (has_ads_synced) {
             GetTotalEntriesInDB total = new GetTotalEntriesInDB();
             int no_of_entries = total.getTotalEntries(getApplicationContext());
             SelectWhichAdTOShow select = new SelectWhichAdTOShow();

@@ -16,18 +16,18 @@ public class ShowMessage extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
 
         String message = extras.getString("messgae");
-        String title=extras.getString("notice_title");
+        String title = extras.getString("notice_title");
 
 
         Toolbar toolbar;
         toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        TextView title_bar=(TextView) findViewById(R.id.mainToolBar);
+        TextView title_bar = (TextView) findViewById(R.id.mainToolBar);
         title_bar.setText(title);
         title_bar.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
-       // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        // getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        TextView tv_msp= (TextView) findViewById(R.id.textView);
-         tv_msp.setText(message);
+        TextView tv_msp = (TextView) findViewById(R.id.textView);
+        tv_msp.setText(message);
     }
 }

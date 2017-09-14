@@ -36,18 +36,17 @@ public class AdChangeCheckerService extends IntentService {
     private static final int POLL_INTERVAL = 1000 * 60;
     private static final String TAG = "AdChangeCheckerService";
 
- /*@Override
-    public void onCreate() {
-        super.onCreate();
-//whatever else you have to to here...
-        android.os.Debug.waitForDebugger();  // this line is key
-    }
-*/
+    /*@Override
+       public void onCreate() {
+           super.onCreate();
+   //whatever else you have to to here...
+           android.os.Debug.waitForDebugger();  // this line is key
+       }
+   */
     public AdChangeCheckerService() {
         // Used to name the worker thread, important only for debugging.
         super(TAG);
     }
-
 
 
     @Override
@@ -62,7 +61,8 @@ public class AdChangeCheckerService extends IntentService {
 
 
     }
-    private void readAndStoreAds()throws IOException, XmlPullParserException {
+
+    private void readAndStoreAds() throws IOException, XmlPullParserException {
         String returned = null;
         URL url = new URL(urll);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -94,6 +94,7 @@ public class AdChangeCheckerService extends IntentService {
         }
 
     }
+
     private void storeAds(String received) throws IOException, XmlPullParserException {
 
         InputStream stream = new ByteArrayInputStream(received.getBytes());
@@ -104,7 +105,7 @@ public class AdChangeCheckerService extends IntentService {
 
         parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
         parser.setInput(stream, null);
-        XMLParserForAds xml_parse=new XMLParserForAds(getApplicationContext());
+        XMLParserForAds xml_parse = new XMLParserForAds(getApplicationContext());
         xml_parse.readFeedAndStore(parser);
 
 

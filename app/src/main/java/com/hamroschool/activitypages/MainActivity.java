@@ -62,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String PREF_NAME_FIRST_LOGIN = "FIRST LOGIN";
     private String received;
     private String result;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,8 +78,8 @@ public class MainActivity extends AppCompatActivity {
 //Get "hasLoggedIn" value. If the value doesn't exist yet false is returned
         boolean firstlogin = settings.getBoolean("isfirst", false);
         if (firstlogin) {
-            //MainActivity.ConnectToServer connect = new MainActivity.ConnectToServer();
-            //connect.execute("sagar");
+            MainActivity.ConnectToServer connect = new MainActivity.ConnectToServer();
+            connect.execute("sagar");
 
             SharedPreferences sharedPreferences = getSharedPreferences(PREF_NAME_FIRST_LOGIN, 0);
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -89,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences settings1 = getSharedPreferences(PREF_NAME, 0);
 //Get "hasLoggedIn" value. If the value doesn't exist yet false is returned
         boolean hasLogged = settings1.getBoolean("hasLoggedIn", false);
-        if(!hasLogged){
+        if (!hasLogged) {
             stopService(new Intent(getApplicationContext(), PollService.class));
             stopService(new Intent(getApplicationContext(), AdChangeCheckerService.class));
             Intent intent = new Intent(this, LoginPage.class);
@@ -97,8 +98,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
-       //PollService.setServiceAlarm(getApplicationContext(), true);
-        AdChangeCheckerService.setServiceAlarm(getApplicationContext(),true);
+        //PollService.setServiceAlarm(getApplicationContext(), true);
+        AdChangeCheckerService.setServiceAlarm(getApplicationContext(), true);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -110,8 +111,8 @@ public class MainActivity extends AppCompatActivity {
 
         tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(viewPager);
-        DBReceiverForProfile dbp=new DBReceiverForProfile(getApplicationContext());
-        String name=dbp.getData("School_Name");
+        DBReceiverForProfile dbp = new DBReceiverForProfile(getApplicationContext());
+        String name = dbp.getData("School_Name");
         TextView title_bar = (TextView) findViewById(R.id.mainToolBar);
         title_bar.setText(name);
 
@@ -167,7 +168,6 @@ public class MainActivity extends AppCompatActivity {
                         // received = readStream(in);
 
 
-
                     } finally {
 
                         urlConnection.disconnect();
@@ -184,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
             DataStoreInTokenAndUserType db_store = new DataStoreInTokenAndUserType(getApplicationContext());
             db_store.storeXML(received, true, false);
 
-          try {
+            try {
                 InputStream stream = new ByteArrayInputStream(result.getBytes());
                 hp.parse(stream);
 
@@ -199,8 +199,8 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(String s) {
-            DBReceiverForProfile dbp=new DBReceiverForProfile(getApplicationContext());
-            String name=dbp.getData("School_Name");
+            DBReceiverForProfile dbp = new DBReceiverForProfile(getApplicationContext());
+            String name = dbp.getData("School_Name");
             TextView title_bar = (TextView) findViewById(R.id.mainToolBar);
             title_bar.setText(name);
         }

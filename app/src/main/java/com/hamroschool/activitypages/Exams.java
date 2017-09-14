@@ -32,6 +32,7 @@ public class Exams extends AppCompatActivity {
     private int m_clicked_positon;
     private static final String PREF_NAME = "LOGIN_PREF";
     private static final String PREF_NAME_ADS_SYNCED = "HAS_ADS_SYNCED";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,31 +42,31 @@ public class Exams extends AppCompatActivity {
         Toolbar toolbar;
         toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        TextView title_bar=(TextView) findViewById(R.id.mainToolBar);
+        TextView title_bar = (TextView) findViewById(R.id.mainToolBar);
         title_bar.setText(R.string.Exams);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         SharedPreferences settings1 = getSharedPreferences(PREF_NAME, 0);
 //Get "hasLoggedIn" value. If the value doesn't exist yet false is returned
         boolean hasLogged = settings1.getBoolean("hasLoggedIn", false);
-        if(!hasLogged){
+        if (!hasLogged) {
             stopService(new Intent(getApplicationContext(), PollService.class));
             Intent intent = new Intent(getApplicationContext(), LoginPage.class);
-          //  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            //  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
         }
 
-DBReceiverForExams received=new DBReceiverForExams(getApplicationContext());
-        int count=received.getNoOfData();
+        DBReceiverForExams received = new DBReceiverForExams(getApplicationContext());
+        int count = received.getNoOfData();
 
 
-        for(int i=0;i<count;i++){
-            TableRow row= new TableRow(this);
-            row.setId(1000+i);
+        for (int i = 0; i < count; i++) {
+            TableRow row = new TableRow(this);
+            row.setId(1000 + i);
             row.setOnClickListener(mlistner);
             //set the color only for the fields in odd places
-            if(i%2!=0) {
+            if (i % 2 != 0) {
                 row.setBackgroundColor(getResources().getColor(R.color.viewSplit));
             }
             row.setGravity(Gravity.CENTER);
@@ -84,14 +85,14 @@ DBReceiverForExams received=new DBReceiverForExams(getApplicationContext());
             textview1.setWidth(dp);
             textview1.setTextColor(Color.BLACK);
             textview1.setGravity(Gravity.CENTER);
-            textview1.setText(received.getData(i+1,1));
+            textview1.setText(received.getData(i + 1, 2));
 
 
             TextView textview2 = new TextView(this);
             textview2.setTextColor(Color.BLACK);
             textview2.setWidth(dp);
             textview2.setGravity(Gravity.CENTER);
-            textview2.setText(received.getData(i+1,2));
+            textview2.setText(received.getData(i + 1, 3));
 
             int x = getResources().getDimensionPixelSize(R.dimen.width2);
             int paddrt = getResources().getDimensionPixelSize(R.dimen.padd);
@@ -99,15 +100,14 @@ DBReceiverForExams received=new DBReceiverForExams(getApplicationContext());
             textview3.setGravity(Gravity.CENTER);
             textview3.setWidth(x);
             textview3.setTextColor(Color.BLACK);
-            textview3.setPadding(0,0,paddrt,0);
-                String s=received.getData(i+1,3);
-            textview3.setText(received.getData(i+1,3));
+            textview3.setPadding(0, 0, paddrt, 0);
+            textview3.setText(received.getData(i + 1, 4));
 
 
             TextView textview4 = new TextView(this);
 
             textview4.setGravity(Gravity.CENTER);
-            textview4 .setPaintFlags(textview4.getPaintFlags()| Paint.UNDERLINE_TEXT_FLAG);
+            textview4.setPaintFlags(textview4.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
             textview4.setWidth(dp);
             textview4.setTextColor(Color.BLACK);
             textview4.setText(R.string.view);
@@ -118,13 +118,13 @@ DBReceiverForExams received=new DBReceiverForExams(getApplicationContext());
             row.addView(textview3);
             row.addView(textview4);
 
-            tabLayout.addView(row,i);
+            tabLayout.addView(row, i);
 
         }
         //showing ads
         SharedPreferences settings = getSharedPreferences(PREF_NAME_ADS_SYNCED, 0);
         boolean has_ads_synced = settings.getBoolean("hasSynced", false);
-        if(has_ads_synced) {
+        if (has_ads_synced) {
             GetTotalEntriesInDB total = new GetTotalEntriesInDB();
             int no_of_entries = total.getTotalEntries(getApplicationContext());
             SelectWhichAdTOShow select = new SelectWhichAdTOShow();
@@ -152,25 +152,43 @@ DBReceiverForExams received=new DBReceiverForExams(getApplicationContext());
         }
 
     }
-    View.OnClickListener mlistner=new View.OnClickListener() {
+
+    View.OnClickListener mlistner = new View.OnClickListener() {
 
         public void onClick(View v) {
-            m_clicked_positon=v.getId()-1000;
+            m_clicked_positon = v.getId() - 1000;
 
-            DBReceiverForExams received=new DBReceiverForExams(getApplicationContext());
-            String marks_sheet=received.getData(m_clicked_positon+1,4);
-            String full_marks=received.getData(m_clicked_positon+1,5);
-            String marks_obtained =received.getData(m_clicked_positon+1,6);
-            String comment=received.getData(m_clicked_positon+1,7);
+            DBReceiverForExams received = new DBReceiverForExams(getApplicationContext());
+            String result_type = received.getData(m_clicked_positon + 1, 1);
+            if (result_type.equals("percentage")) {
+                String marks_sheet = received.getData(m_clicked_positon + 1, 5);
+                String full_marks = received.getData(m_clicked_positon + 1, 6);
+                String marks_obtained = received.getData(m_clicked_positon + 1, 7);
+                String comment = received.getData(m_clicked_positon + 1, 8);
 
-            Intent intent = new Intent(getApplicationContext(), ExamMarksSheetPercentage.class);
-            Bundle extras = new Bundle();
-            extras.putString("marks_sheet",marks_sheet);
-            extras.putString("marks_obtained",marks_obtained);
-            extras.putString("full_marks",full_marks);
-            extras.putString("comment",comment);
-            intent.putExtras(extras);
-            startActivity(intent);
+                Intent intent = new Intent(getApplicationContext(), ExamMarksSheetPercentage.class);
+                Bundle extras = new Bundle();
+                extras.putString("marks_sheet", marks_sheet);
+                extras.putString("marks_obtained", marks_obtained);
+                extras.putString("full_marks", full_marks);
+                extras.putString("comment", comment);
+                intent.putExtras(extras);
+                startActivity(intent);
+            } else {
+                    //for GPA
+                String marks_sheet = received.getData(m_clicked_positon + 1, 5);
+                String cgpa = received.getData(m_clicked_positon + 1, 9);
+                String comment = received.getData(m_clicked_positon + 1, 8);
+
+                Intent intent = new Intent(getApplicationContext(), ExamMarkSheetGPA.class);
+                Bundle extras = new Bundle();
+                extras.putString("marks_sheet", marks_sheet);
+                extras.putString("CGPA", cgpa);
+                extras.putString("comment", comment);
+                intent.putExtras(extras);
+                startActivity(intent);
+
+            }
         }
     };
 

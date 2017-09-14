@@ -20,11 +20,13 @@ public class XMLParserForAds {
     private static final String ns = null;
     private boolean complete_flag = false;
     private Context mContext;
-    private byte[]ad_byte_array;
-    public XMLParserForAds(Context mContext){
-        this.mContext=mContext;
+    private byte[] ad_byte_array;
+
+    public XMLParserForAds(Context mContext) {
+        this.mContext = mContext;
     }
-    public void readFeedAndStore(XmlPullParser parser) throws XmlPullParserException, IOException{
+
+    public void readFeedAndStore(XmlPullParser parser) throws XmlPullParserException, IOException {
         String name;
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -42,10 +44,7 @@ public class XMLParserForAds {
                 skip(parser);
             }
         }
-
     }
-
-
 
     private void readAdvertisement(XmlPullParser parser) throws IOException, XmlPullParserException {
         String ad = null, redirect = null;
@@ -63,8 +62,8 @@ public class XMLParserForAds {
                 ad = readText(parser);
                 parser.next();
 
-                ConvertToByteArray convert=new ConvertToByteArray();
-                ad_byte_array=convert.getLogoImage(ad);
+                ConvertToByteArray convert = new ConvertToByteArray();
+                ad_byte_array = convert.getLogoImage(ad);
                 redirect = readText(parser);
                 parser.next();
                 tagName = parser.getName();
@@ -83,9 +82,9 @@ public class XMLParserForAds {
             }
         }
         complete_flag = true;
-        SharedPreferences has_ads_synced=mContext.getSharedPreferences(PREF_NAME_ADS_SYNCED,0);
+        SharedPreferences has_ads_synced = mContext.getSharedPreferences(PREF_NAME_ADS_SYNCED, 0);
         SharedPreferences.Editor editor2 = has_ads_synced.edit();
-        editor2.putBoolean("hasSynced",true);
+        editor2.putBoolean("hasSynced", true);
         editor2.apply();
 
     }

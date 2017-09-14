@@ -24,7 +24,8 @@ public class DataStoreInDBExams {
         return DataBase.getWritableDatabase();
     }
 
-    public void storeStudenInfo(String grade, String exam_type, String date, String markssheet, String full_marks, String obt_marks, String comments, boolean delete_table,boolean notclear) {
+    public void storeStudenInfo(String result_type,String grade, String exam_type, String date, String markssheet,
+                                String full_marks, String obt_marks, String comments,String CGPA ,boolean delete_table, boolean notclear) {
 
         SQLiteDatabase db = open();
         if (delete_table) {
@@ -32,8 +33,9 @@ public class DataStoreInDBExams {
             db.execSQL("DELETE FROM SQLITE_SEQUENCE WHERE NAME = '" + "Exams" + "'");
 
         }
-        if(!notclear) {
+        if (!notclear) {
             ContentValues user_data = new ContentValues();
+            user_data.put("Result_type", result_type);
             user_data.put("Class", grade);
             user_data.put("Exam_Type", exam_type);
             user_data.put("Date", date);
@@ -41,7 +43,7 @@ public class DataStoreInDBExams {
             user_data.put("Full_Marks", full_marks);
             user_data.put("Obtained_Marks", obt_marks);
             user_data.put("Comments", comments);
-
+            user_data.put("CGPA", CGPA);
             db.insert("Exams", null, user_data);
         }
     }

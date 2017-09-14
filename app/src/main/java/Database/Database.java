@@ -17,7 +17,7 @@ public class Database extends SQLiteOpenHelper {
     private static String TABLE_FEE_RECORD = "fee_record";
     //this is for percentage
     private static String TABLE_EXAMS = "Exams";
-    private static String TABLE_EXAMS_GPA = "Exams_GPA";
+
     private static String TABLE_PROFILE = "student_profile";
     private static String TABLE_XML_DATA = "xml_data";
     private static String TABLE_NOTICES = "notices";
@@ -68,34 +68,25 @@ public class Database extends SQLiteOpenHelper {
                 + "Amount TEXT,"
                 + "Month TEXT,"
                 + "Date TEXT);");
-//TODO create database for GPA based systems
+
         db.execSQL("CREATE TABLE " + TABLE_EXAMS + "("
                 + "_id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                +"Result_type TEXT,"
                 + "Class TEXT,"
                 + "Exam_Type TEXT,"
                 + "Date TEXT,"
                 + "Marks_Sheet TEXT,"
                 + "Full_Marks TEXT,"
                 + "Obtained_Marks TEXT,"
-                + "Comments TEXT);");
-        //TODO make table for GPA
-        db.execSQL("CREATE TABLE " + TABLE_EXAMS_GPA + "("
-                + "_id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + "Class TEXT,"
-                + "Exam_Type TEXT,"
-                + "Date TEXT,"
-                + "Marks_Sheet TEXT,"
-                + "Full_Marks TEXT,"
-                + "Obtained_Marks TEXT,"
-                + "Comments TEXT);");
+                + "Comments TEXT,"
+                + "CGPA TEXT);");
 
 
         db.execSQL("CREATE TABLE " + TABLE_PROFILE + "("
                 + "_id INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + "Student_info TEXT,"
                 + "School_Name TEXT,"
-                + "photo_bitmap BLOB,"
-                + "result_type TEXT);");
+                + "photo_bitmap BLOB);");
 
         db.execSQL("CREATE TABLE " + TABLE_XML_DATA + "("
                 + "_id INTEGER PRIMARY KEY AUTOINCREMENT,"
@@ -122,8 +113,6 @@ public class Database extends SQLiteOpenHelper {
                 + "students_info TEXT);");
 
         //to check if the ads of profile has synced or not
-
-
 
 
     }

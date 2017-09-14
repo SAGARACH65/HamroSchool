@@ -22,6 +22,7 @@ import Ads.GetTotalEntriesInDB;
 import Ads.SelectWhichAdTOShow;
 import Ads.ShowAds;
 import utility.Utility;
+
 import com.squareup.picasso.Picasso;
 
 import Database.DBReceivedCachedImages;
@@ -111,7 +112,7 @@ public class StudentInfoFragment extends Fragment {
 
         SharedPreferences settings = getContext().getSharedPreferences(PREF_NAME_ADS_SYNCED, 0);
         boolean has_ads_synced = settings.getBoolean("hasSynced", false);
-        if(has_ads_synced) {
+        if (has_ads_synced) {
             //showing ads
             GetTotalEntriesInDB total = new GetTotalEntriesInDB();
             int no_of_entries = total.getTotalEntries(getContext());
@@ -138,7 +139,6 @@ public class StudentInfoFragment extends Fragment {
                 }
             });
         }
-
 
 
         return view;

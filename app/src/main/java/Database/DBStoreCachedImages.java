@@ -13,6 +13,7 @@ import Database.Database;
 
 public class DBStoreCachedImages {
     private Context mContext;
+
     public DBStoreCachedImages(Context context) {
         this.mContext = context;
     }
@@ -22,7 +23,7 @@ public class DBStoreCachedImages {
         return DataBase.getWritableDatabase();
     }
 
-    public void storeAdlinks(byte[] ads_byte_array,  String redirect_link, boolean delete_table,boolean notclear) {
+    public void storeAdlinks(byte[] ads_byte_array, String redirect_link, boolean delete_table, boolean notclear) {
 
         SQLiteDatabase db = open();
         if (delete_table) {
@@ -30,14 +31,13 @@ public class DBStoreCachedImages {
             db.execSQL("DELETE FROM SQLITE_SEQUENCE WHERE NAME = '" + "cached_images" + "'");
 
         }
-        if(!notclear) {
+        if (!notclear) {
             ContentValues user_data = new ContentValues();
             user_data.put("images", ads_byte_array);
             user_data.put("redirect_link", redirect_link);
             db.insert("cached_images", null, user_data);
         }
     }
-
 
 
 }

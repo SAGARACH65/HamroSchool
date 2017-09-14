@@ -15,10 +15,12 @@ public class DBReceivedCachedImages {
 
     private Context mContext;
     private String send;
-    private byte[]send_byte_array;
+    private byte[] send_byte_array;
+
     public DBReceivedCachedImages(Context context) {
         this.mContext = context;
     }
+
     private SQLiteDatabase open() {
         SQLiteOpenHelper DataBase = new Database(mContext);
 
@@ -30,7 +32,7 @@ public class DBReceivedCachedImages {
         int count = 0;
         SQLiteDatabase db = open();
         Cursor cursor = db.query("cached_images",
-                new String[]{"_id", "images","redirect_link"},
+                new String[]{"_id", "images", "redirect_link"},
                 null,
                 null, null, null, null
         );
@@ -48,13 +50,12 @@ public class DBReceivedCachedImages {
     }
 
 
-
-    public  byte[] getDataBitmap(int row_no){
+    public byte[] getDataBitmap(int row_no) {
 
 
         SQLiteDatabase db = open();
         Cursor cursor = db.query("cached_images",
-                new String[]{"_id", "images","redirect_link"},
+                new String[]{"_id", "images", "redirect_link"},
                 null,
                 null, null, null, null
         );
@@ -82,12 +83,12 @@ public class DBReceivedCachedImages {
        * column no specifies the typre of data to receive
      */
 
-    //as this is only for string data
-    int column_no=2;
+        //as this is only for string data
+        int column_no = 2;
         String send = null;
         SQLiteDatabase db = open();
         Cursor cursor = db.query("cached_images",
-                new String[]{"_id", "images","redirect_link"},
+                new String[]{"_id", "images", "redirect_link"},
                 null,
                 null, null, null, null
         );

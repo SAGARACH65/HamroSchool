@@ -10,8 +10,8 @@ import Database.DBReceivedCachedImages;
 
 public class GetTotalEntriesInDB {
 
-    public int getTotalEntries(Context context){
-        DBReceivedCachedImages receiver=new DBReceivedCachedImages(context);
-      return receiver.getNoOfData();
+    public int getTotalEntries(Context context) {
+        DBReceivedCachedImages receiver = new DBReceivedCachedImages(context);
+        return receiver.getNoOfData();
     }
 }

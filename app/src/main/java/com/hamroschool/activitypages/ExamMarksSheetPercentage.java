@@ -24,8 +24,8 @@ public class ExamMarksSheetPercentage extends AppCompatActivity {
         //note: herre send intent from the previous activity with the exam type and show in toolbar
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_exam_marks_sheet_percentage);
-        Bundle extras = getIntent().getExtras();
 
+        Bundle extras = getIntent().getExtras();
         marks_obtained = extras.getString("marks_obtained");
         marks_sheet = extras.getString("marks_sheet");
         full_marks = extras.getString("full_marks");
@@ -49,7 +49,6 @@ public class ExamMarksSheetPercentage extends AppCompatActivity {
         if (marks_sheet.length() != 0) {
             String[] parts = marks_sheet.split("#");
 
-//TODO 3.4 jasto data halda crash vako cha fix it
             for (int i = 0; i < parts.length; i++) {
                 TableRow row = new TableRow(this);
                 String[] details = parts[i].split(":");
@@ -122,7 +121,7 @@ public class ExamMarksSheetPercentage extends AppCompatActivity {
 
                 tabLayout.addView(row, i);
             }
-
+            //this is for the last bar which sows the fullmarks,total, wtc
             int x = parts.length;
 
             TableRow row = new TableRow(this);

@@ -24,23 +24,23 @@ public class DataStoreInDBFeeRecord {
     }
 
     public void storeFeeRecord(String grade, String amount, String on_date, String particulars,
-                               String month, boolean delete_table,boolean notclear) {
+                               String month, boolean delete_table, boolean notclear) {
         SQLiteDatabase db = open();
         if (delete_table) {
             db.delete("fee_record", null, null);
             db.execSQL("DELETE FROM SQLITE_SEQUENCE WHERE NAME = '" + "fee_record" + "'");
 
         }
-        if(!notclear){
-        ContentValues user_data = new ContentValues();
-        user_data.put("Class", grade);
-        user_data.put("Particulars", particulars);
-        user_data.put("Amount", amount);
-        user_data.put("Month", month);
-        user_data.put("Date", on_date);
+        if (!notclear) {
+            ContentValues user_data = new ContentValues();
+            user_data.put("Class", grade);
+            user_data.put("Particulars", particulars);
+            user_data.put("Amount", amount);
+            user_data.put("Month", month);
+            user_data.put("Date", on_date);
 
-        db.insert("fee_record", null, user_data);
+            db.insert("fee_record", null, user_data);
+        }
     }
-}
 }
 

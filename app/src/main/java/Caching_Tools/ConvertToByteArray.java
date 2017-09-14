@@ -7,13 +7,14 @@ import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
+
 /**
  * Created by Sagar on 9/13/2017.
  */
 
 public class ConvertToByteArray {
 
-    public byte[] getLogoImage(String url){
+    public byte[] getLogoImage(String url) {
         try {
 
             URL imageUrl = new URL(url);
@@ -31,7 +32,7 @@ public class ConvertToByteArray {
 
             baos.flush();
 
-            return  baos.toByteArray();
+            return baos.toByteArray();
 
         } catch (Exception e) {
             Log.d("ConvertToByteArray", "Error: " + e.toString());

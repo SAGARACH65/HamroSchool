@@ -16,7 +16,7 @@ import java.io.InputStream;
 
 public class DetectFieldsChanged extends ContextWrapper {
     private String detected_change = "";
-    private static  String fee_rec = "", exam_rec = "", notices_rec = "", fee_db = "", exam_db = "", notices_db = "";
+    private static String fee_rec = "", exam_rec = "", notices_rec = "", fee_db = "", exam_db = "", notices_db = "";
 
     public DetectFieldsChanged(Context base) {
         super(base);
@@ -39,24 +39,21 @@ public class DetectFieldsChanged extends ContextWrapper {
             checkforDB(parser_db);
             checkforWeb(parser_web);
             // return readFeed(parser);
-            if(fee_db==null){
-                detected_change=detected_change+"fee"+"#";
-            }
-        else if(!fee_db.equals(fee_rec)){
-                detected_change=detected_change+"fee"+"#";
+            if (fee_db == null) {
+                detected_change = detected_change + "fee" + "#";
+            } else if (!fee_db.equals(fee_rec)) {
+                detected_change = detected_change + "fee" + "#";
             }
 
-            if(exam_db==null){
-                detected_change=detected_change+"exam"+"#";
+            if (exam_db == null) {
+                detected_change = detected_change + "exam" + "#";
+            } else if (!exam_db.equals(exam_rec)) {
+                detected_change = detected_change + "exam" + "#";
             }
-            else if(!exam_db.equals(exam_rec)){
-                detected_change=detected_change+"exam"+"#";
-            }
-            if(notices_db==null){
-                detected_change=detected_change+"notices"+"#";
-            }
-            else if(!notices_db.equals(notices_rec)){
-                detected_change=detected_change+"notices"+"#";
+            if (notices_db == null) {
+                detected_change = detected_change + "notices" + "#";
+            } else if (!notices_db.equals(notices_rec)) {
+                detected_change = detected_change + "notices" + "#";
             }
 
             return detected_change;
@@ -65,7 +62,7 @@ public class DetectFieldsChanged extends ContextWrapper {
             received_stream.close();
             db_stream.close();
         }
-            }
+    }
 
     private void checkforWeb(XmlPullParser parser) throws XmlPullParserException, IOException {
         int eventType = parser.getEventType();
@@ -78,26 +75,26 @@ public class DetectFieldsChanged extends ContextWrapper {
             }
             if (eventType == XmlPullParser.TEXT) {
                 if ("examresult".equals(currentTag)) {
-                    exam_rec = exam_rec+parser.getText();
+                    exam_rec = exam_rec + parser.getText();
                 }
 
 
                 if ("noticesrecord".equals(currentTag)) {
-                    notices_rec = notices_rec+parser.getText();
+                    notices_rec = notices_rec + parser.getText();
                 }
                 if ("feesrecord".equals(currentTag)) {
-                    fee_rec = fee_rec+parser.getText();
+                    fee_rec = fee_rec + parser.getText();
                 }
             }
-             if (eventType == XmlPullParser.END_TAG&&(parser.getName().equals("examresult")||  parser.getName().equals("noticesrecord")||parser.getName().equals("feesrecord"))) {
+            if (eventType == XmlPullParser.END_TAG && (parser.getName().equals("examresult") || parser.getName().equals("noticesrecord") || parser.getName().equals("feesrecord"))) {
                 if ("examresult".equals(currentTag)) {
-                    currentTag=null;
+                    currentTag = null;
                 }
                 if ("noticesrecord".equals(currentTag)) {
-                    currentTag=null;
+                    currentTag = null;
                 }
                 if ("feesrecord".equals(currentTag)) {
-                    currentTag=null;
+                    currentTag = null;
                 }
             }
             eventType = parser.next();
@@ -105,6 +102,7 @@ public class DetectFieldsChanged extends ContextWrapper {
 
 
     }
+
     private String readText(XmlPullParser parser) throws IOException, XmlPullParserException {
         String result = "";
         if (parser.next() == XmlPullParser.TEXT) {
@@ -113,7 +111,8 @@ public class DetectFieldsChanged extends ContextWrapper {
         }
         return result;
     }
-    private void checkforDB(XmlPullParser parser)throws XmlPullParserException, IOException {
+
+    private void checkforDB(XmlPullParser parser) throws XmlPullParserException, IOException {
         int eventType = parser.getEventType();
         String currentTag = null;
         while (eventType != XmlPullParser.END_DOCUMENT) {
@@ -124,24 +123,23 @@ public class DetectFieldsChanged extends ContextWrapper {
             }
             if (eventType == XmlPullParser.TEXT) {
                 if ("examresult".equals(currentTag)) {
-                    exam_db = exam_db+parser.getText();
+                    exam_db = exam_db + parser.getText();
                 }
                 if ("noticesrecord".equals(currentTag)) {
-                    notices_db = notices_db+parser.getText();
+                    notices_db = notices_db + parser.getText();
                 }
                 if ("feesrecord".equals(currentTag)) {
-                    fee_db = fee_db+parser.getText();
+                    fee_db = fee_db + parser.getText();
                 }
-            }
-            else if (eventType == XmlPullParser.END_TAG&&(parser.getName().equals("examresult")||  parser.getName().equals("noticesrecord")||parser.getName().equals("feesrecord"))) {
+            } else if (eventType == XmlPullParser.END_TAG && (parser.getName().equals("examresult") || parser.getName().equals("noticesrecord") || parser.getName().equals("feesrecord"))) {
                 if ("examresult".equals(currentTag)) {
-                    currentTag=null;
+                    currentTag = null;
                 }
                 if ("noticesrecord".equals(currentTag)) {
-                    currentTag=null;
+                    currentTag = null;
                 }
                 if ("feesrecord".equals(currentTag)) {
-                    currentTag=null;
+                    currentTag = null;
                 }
             }
             eventType = parser.next();

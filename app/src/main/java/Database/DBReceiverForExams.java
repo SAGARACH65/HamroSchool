@@ -29,14 +29,24 @@ public class DBReceiverForExams {
         int count = 0;
         SQLiteDatabase db = open();
         Cursor cursor = db.query("Exams",
-                new String[]{"_id", "Class",
+                new String[]{"_id","Result_type","Class",
                         "Exam_Type", "Date", "Marks_Sheet", "Full_Marks",
-                        "Obtained_Marks", "Comments"},
+                        "Obtained_Marks", "Comments","CGPA",},
                 null,
                 null, null, null, null
         );
-
-
+//
+//        db.execSQL("CREATE TABLE " + TABLE_EXAMS + "("
+//                + "_id INTEGER PRIMARY KEY AUTOINCREMENT,"
+//                +"Result_type TEXT"
+//                + "Class TEXT,"
+//                + "Exam_Type TEXT,"
+//                + "Date TEXT,"
+//                + "Marks_Sheet TEXT,"
+//                + "Full_Marks TEXT,"
+//                + "Obtained_Marks TEXT,"
+//                + "Comments TEXT,"
+//                + "CGPA TEXT);");
         if (cursor.moveToFirst()) {
             do {
                 count++;
@@ -57,9 +67,9 @@ public class DBReceiverForExams {
         String send = null;
         SQLiteDatabase db = open();
         Cursor cursor = db.query("Exams",
-                new String[]{"_id", "Class",
+                new String[]{"_id","Result_type","Class",
                         "Exam_Type", "Date", "Marks_Sheet", "Full_Marks",
-                        "Obtained_Marks", "Comments"},
+                        "Obtained_Marks", "Comments","CGPA",},
                 null,
                 null, null, null, null
         );
