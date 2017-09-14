@@ -85,7 +85,7 @@ public class HamroSchoolXmlParser {
                     readProfile(parser);
                     break;
                 case "examresult":
-//                    readExamResult(parser);
+                 readExamResult(parser);
                     break;
                 case "feesrecord":
                     readFee(parser);
@@ -108,39 +108,7 @@ public class HamroSchoolXmlParser {
         complete_flag = true;
     }
 
-    private void readAdvertisement(XmlPullParser parser) throws IOException, XmlPullParserException {
-        String ad = null, redirect = null;
-        parser.require(XmlPullParser.START_TAG, ns, "ads");
-        parser.next();
 
-        int i = 0;
-
-        String tagName = parser.getName();
-        while (!tagName.equals("ads")) {
-            parser.next();
-            tagName = parser.getName();
-
-            while (!tagName.equals("ad")) {
-                ad = readText(parser);
-                parser.next();
-
-                redirect = readText(parser);
-                parser.next();
-                tagName = parser.getName();
-
-            }
-            parser.next();
-            tagName = parser.getName();
-            DBStoreCachedImages dsa = new DBStoreCachedImages(mContext);
-            if (i == 0) {
-                dsa.storeAdlinks(ad, redirect, true, false);
-                i++;
-            } else {
-                dsa.storeAdlinks(ad, redirect, false, false);
-
-            }
-        }
-    }
 
     private void readTeacherRecord(XmlPullParser parser) throws IOException, XmlPullParserException {
         String subject = null, teacher_name = null, email = null, contact_no = null;

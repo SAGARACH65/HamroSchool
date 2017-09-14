@@ -52,7 +52,7 @@ public class PollService extends IntentService {
     private boolean donotcontinue = false;
     private static final String PREF_NAME = "LOGIN_PREF";
 
-    String urll = "http://www.hamroschool.net/myschoolapp/loginapi/getstudentdetails.php?usertoken=";
+    private String urll = "http://www.hamroschool.net/myschoolapp/loginapi/getstudentdetails.php?usertoken=";
     private Context mContext;
     private static final int POLL_INTERVAL = 1000 * 60;
 
@@ -92,14 +92,7 @@ public class PollService extends IntentService {
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
         if (urlConnection.getResponseCode() == 200) {
 
-
             try {
-                //   urlConnection.setDoOutput(true);
-                // urlConnection.setChunkedStreamingMode(0);
-                //urlConnection.setConnectTimeout(5 * 1000);
-                //OutputStream out = new BufferedOutputStream(urlConnection.getOutputStream());
-                //writeStream(out,textTosend);
-
 
                 int statusCode = urlConnection.getResponseCode();
 
@@ -114,12 +107,7 @@ public class PollService extends IntentService {
 
 
                 returned = readStream(in);
-                //  HamroSchoolXmlParser hp = new HamroSchoolXmlParser(getApplicationContext());
-                //  InputStream stream = new ByteArrayInputStream(returned.getBytes(StandardCharsets.UTF_8));
-                //     hp.parse(stream);
-             /*   HamroSchoolXmlParser hp = new HamroSchoolXmlParser(getApplicationContext());
-                InputStream stream = new ByteArrayInputStream(returned.getBytes(StandardCharsets.UTF_8));
-               */
+
                 checkAndStore(returned);
             } finally {
                 //regardkless of success or faliure we disconnect the connection

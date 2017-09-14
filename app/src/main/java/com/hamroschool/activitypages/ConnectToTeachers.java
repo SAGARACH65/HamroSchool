@@ -3,6 +3,7 @@ package com.hamroschool.activitypages;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.net.Uri;
@@ -21,6 +22,9 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 
+import Ads.GetTotalEntriesInDB;
+import Ads.SelectWhichAdTOShow;
+import Ads.ShowAds;
 import Database.DBReceivedCachedImages;
 import Database.DBReceiverForConnectToTeachers;
 import service.PollService;
@@ -30,7 +34,7 @@ public class ConnectToTeachers extends AppCompatActivity {
 
     private int m_clicked_positon;
     private static final String PREF_NAME = "LOGIN_PREF";
-
+    private static final String PREF_NAME_ADS_SYNCED = "HAS_ADS_SYNCED";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,24 +130,31 @@ public class ConnectToTeachers extends AppCompatActivity {
             tabLayout.addView(row, i);
 
         }
-        boolean isAvailable = Utility.isNetworkAvailable(getApplicationContext());
-        if (isAvailable) {
-            DBReceivedCachedImages ad=new DBReceivedCachedImages(getApplicationContext());
-            String link= ad.getData("ad");
-            ImageView img= (ImageView) findViewById(R.id.imageView);
-            Picasso.with(getApplicationContext())
-                    .load(link).fit()
-                    .into(img);
+        //showing ads
+        SharedPreferences settings = getSharedPreferences(PREF_NAME_ADS_SYNCED, 0);
+        boolean has_ads_synced = settings.getBoolean("hasSynced", false);
+        if(has_ads_synced) {
+            GetTotalEntriesInDB total = new GetTotalEntriesInDB();
+            int no_of_entries = total.getTotalEntries(getApplicationContext());
+            SelectWhichAdTOShow select = new SelectWhichAdTOShow();
+            int which_ad = select.select_which_ad(no_of_entries);
+            //getting bitmap and redirect link of that ad
+            ShowAds adsData = new ShowAds(getApplicationContext());
+            Bitmap image_bitmap_data = adsData.getBitmap(which_ad);
+            final String redirect_link = adsData.getRedirectLink(which_ad);
 
+            //show the ad in imageview
+            ImageView img = (ImageView) findViewById(R.id.imageView);
+            img.setScaleType(ImageView.ScaleType.FIT_XY);
+            img.setImageBitmap(image_bitmap_data);
 
-            final String redirect= ad.getData("redirect");
-
+            //redirect link for the ad
             img.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Intent intent = new Intent();
                     intent.setAction(Intent.ACTION_VIEW);
                     intent.addCategory(Intent.CATEGORY_BROWSABLE);
-                    intent.setData(Uri.parse(redirect));
+                    intent.setData(Uri.parse(redirect_link));
                     startActivity(intent);
                 }
             });

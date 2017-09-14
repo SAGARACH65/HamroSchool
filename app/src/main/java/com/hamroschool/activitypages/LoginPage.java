@@ -43,6 +43,8 @@ public class LoginPage extends AppCompatActivity {
 
     private static final String PREF_NAME_FIRST_LOGIN = "FIRST LOGIN";
     private static final String PREF_NAME = "LOGIN_PREF";
+
+    private static final String PREF_NAME_ADS_SYNCED = "HAS_ADS_SYNCED";
     private static final String URL = //"http://thenetwebs.com/myschoolapp/schoolapp/loginapi/getstudentdetails.php?usertoken=b6d16986f1d5460e";
 
             "http://www.hamroschool.net/myschoolapp/loginapi/checkuser.php?action=login&lgname=";
@@ -86,10 +88,7 @@ public class LoginPage extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-              /*  SharedPreferences.Editor editor = getSharedPreferences(PREF_LOGIN, MODE_PRIVATE).edit();
-                editor.putString(KEY_CREDENTIALS, "DUMMY CREDENTIALS");
-                editor.commit();
-*/                  //checking if network is available
+                //checking if network is available
                 boolean isAvailable = Utility.isNetworkAvailable(LoginPage.this);
                 if (!isAvailable) {
                     Toast.makeText(getApplicationContext(), "No Internet Connection Available", Toast.LENGTH_LONG).show();
@@ -271,6 +270,11 @@ public class LoginPage extends AppCompatActivity {
                     SharedPreferences.Editor editor1 = sharedPreferences1.edit();
                     editor1.putBoolean("isfirst", true);
                     editor1.apply();
+
+                    SharedPreferences has_ads_synced = getSharedPreferences(PREF_NAME_ADS_SYNCED, 0);
+                    SharedPreferences.Editor editor2 = has_ads_synced.edit();
+                    editor2.putBoolean("hasSynced", false);
+                    editor2.apply();
 
 
                     //selects activity to pass intent according if the user is teacher or parent

@@ -13,6 +13,7 @@
         android:roundIcon="@drawable/school"
         android:supportsRtl="true"
         android:theme="@style/AppMaterialTheme">
+
         <activity android:name=".LoginChecker">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -20,6 +21,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait" />
@@ -53,6 +55,10 @@
 
         <service
             android:name="service.PollService"
+            android:exported="false" />
+
+        <service
+            android:name="service.AdChangeCheckerService"
             android:exported="false" />
 
         <activity android:name=".ShowMessage">

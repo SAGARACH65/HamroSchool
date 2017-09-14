@@ -29,6 +29,7 @@ public class Database extends SQLiteOpenHelper {
     private static String PARENT_TEACHER_CHAT = "chat";
     private static int DB_VERSION = 1;
 
+
     Database(Context context) {
         super(context, DB_NAME, null, DB_VERSION);//null is for cursors//sqlite helper classes constructor is being called
 
@@ -120,7 +121,13 @@ public class Database extends SQLiteOpenHelper {
                 + "Name TEXT,"
                 + "students_info TEXT);");
 
+        //to check if the ads of profile has synced or not
+
+
+
+
     }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

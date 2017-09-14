@@ -49,6 +49,7 @@ import Database.DataStoreInTokenAndUserType;
 import Fragments.CommunicationFragment;
 import Fragments.ExamFragment;
 import Fragments.StudentInfoFragment;
+import service.AdChangeCheckerService;
 import service.PollService;
 import xmlparser.HamroSchoolXmlParser;
 
@@ -76,8 +77,8 @@ public class MainActivity extends AppCompatActivity {
 //Get "hasLoggedIn" value. If the value doesn't exist yet false is returned
         boolean firstlogin = settings.getBoolean("isfirst", false);
         if (firstlogin) {
-            MainActivity.ConnectToServer connect = new MainActivity.ConnectToServer();
-            connect.execute("sagar");
+            //MainActivity.ConnectToServer connect = new MainActivity.ConnectToServer();
+            //connect.execute("sagar");
 
             SharedPreferences sharedPreferences = getSharedPreferences(PREF_NAME_FIRST_LOGIN, 0);
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -90,13 +91,14 @@ public class MainActivity extends AppCompatActivity {
         boolean hasLogged = settings1.getBoolean("hasLoggedIn", false);
         if(!hasLogged){
             stopService(new Intent(getApplicationContext(), PollService.class));
-
+            stopService(new Intent(getApplicationContext(), AdChangeCheckerService.class));
             Intent intent = new Intent(this, LoginPage.class);
 
             startActivity(intent);
             finish();
         }
-        PollService.setServiceAlarm(getApplicationContext(), true);
+       //PollService.setServiceAlarm(getApplicationContext(), true);
+        AdChangeCheckerService.setServiceAlarm(getApplicationContext(),true);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -182,7 +184,7 @@ public class MainActivity extends AppCompatActivity {
             DataStoreInTokenAndUserType db_store = new DataStoreInTokenAndUserType(getApplicationContext());
             db_store.storeXML(received, true, false);
 
-            try {
+          try {
                 InputStream stream = new ByteArrayInputStream(result.getBytes());
                 hp.parse(stream);
 

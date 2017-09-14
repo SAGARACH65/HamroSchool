@@ -21,6 +21,9 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
+import Ads.GetTotalEntriesInDB;
+import Ads.SelectWhichAdTOShow;
+import Ads.ShowAds;
 import Database.DBReceivedCachedImages;
 import Database.DBReceiverForProfile;
 import service.PollService;
@@ -28,6 +31,7 @@ import utility.Utility;
 
 public class Profile extends AppCompatActivity {
     private static final String PREF_NAME = "LOGIN_PREF";
+    private static final String PREF_NAME_ADS_SYNCED = "HAS_ADS_SYNCED";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,8 +132,7 @@ public class Profile extends AppCompatActivity {
             tabLayout.addView(row, i);
         }
 
-
-        //retriving and displaying user images from database
+//retriving and displaying user images from database
         DBReceiverForProfile dbr = new DBReceiverForProfile(getApplicationContext());
         byte[] byte_array = dbr.getDataBitmap();
         //converting the byte array back into bitstream
@@ -137,31 +140,38 @@ public class Profile extends AppCompatActivity {
         ImageView img_user_photo = (ImageView) findViewById(R.id.imageViewProfile);
         img_user_photo.setImageBitmap(image_bitmap);
 
+//showing ads
+        SharedPreferences settings = getSharedPreferences(PREF_NAME_ADS_SYNCED, 0);
+        boolean has_ads_synced = settings.getBoolean("hasSynced", false);
+        if (has_ads_synced) {
+            DBReceivedCachedImages total = new DBReceivedCachedImages(getApplicationContext());
+            int no_of_entries = total.getNoOfData();
+            // no_of_entries++;
+            SelectWhichAdTOShow select = new SelectWhichAdTOShow();
+            int which_ad = select.select_which_ad(no_of_entries);
+            //getting bitmap and redirect link of that ad
+            ShowAds adsData = new ShowAds(getApplicationContext());
+            Bitmap image_bitmap_data = adsData.getBitmap(which_ad);
+            final String redirect_link = adsData.getRedirectLink(which_ad);
 
-        boolean isAvailable = Utility.isNetworkAvailable(getApplicationContext());
-        if (isAvailable) {
-            DBReceivedCachedImages ad = new DBReceivedCachedImages(getApplicationContext());
-            String link = ad.getData("ad");
-
+            //show the ad in imageview
             ImageView img = (ImageView) findViewById(R.id.imageView);
+            img.setScaleType(ImageView.ScaleType.FIT_XY);
+            img.setImageBitmap(image_bitmap_data);
 
-
-            Picasso.with(getApplicationContext())
-                    .load(link).fit()
-                    .into(img);
-
-            final String redirect = ad.getData("redirect");
-
+            //redirect link for the ad
             img.setOnClickListener(new View.OnClickListener() {
                 public void onClick(View v) {
                     Intent intent = new Intent();
                     intent.setAction(Intent.ACTION_VIEW);
                     intent.addCategory(Intent.CATEGORY_BROWSABLE);
-                    intent.setData(Uri.parse(redirect));
+                    intent.setData(Uri.parse(redirect_link));
                     startActivity(intent);
                 }
             });
+
         }
+
 
     }
 

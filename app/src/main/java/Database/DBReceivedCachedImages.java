@@ -15,6 +15,7 @@ public class DBReceivedCachedImages {
 
     private Context mContext;
     private String send;
+    private byte[]send_byte_array;
     public DBReceivedCachedImages(Context context) {
         this.mContext = context;
     }
@@ -23,41 +24,92 @@ public class DBReceivedCachedImages {
 
         return DataBase.getReadableDatabase();
     }
-    //request specifies the data required by the caller
-    public  String getData(String request){
+
+    public int getNoOfData() {
+
+        int count = 0;
         SQLiteDatabase db = open();
         Cursor cursor = db.query("cached_images",
                 new String[]{"_id", "images","redirect_link"},
                 null,
                 null, null, null, null
         );
-        send = getDataAccToRequest(cursor,request);
+
+
+        if (cursor.moveToFirst()) {
+            do {
+                count++;
+                cursor.moveToNext();
+
+            } while (!cursor.isAfterLast());
+        }
+        cursor.close();
+        return count;
+    }
+
+
+
+    public  byte[] getDataBitmap(int row_no){
+
+
+        SQLiteDatabase db = open();
+        Cursor cursor = db.query("cached_images",
+                new String[]{"_id", "images","redirect_link"},
+                null,
+                null, null, null, null
+        );
+        if (cursor.moveToFirst()) {
+            do {
+
+                if (cursor.getInt(0) == row_no) {
+                    send_byte_array = cursor.getBlob(1);
+                    cursor.close();
+                    return send_byte_array;
+
+                }
+                cursor.moveToNext();
+
+            } while (!cursor.isAfterLast());
+        }
+        cursor.close();
+        return send_byte_array;
+
+    }
+
+    public String getRedirectLink(int row_no) {
+    /*
+       *row no specifies the colun from which we want to get daat
+       * column no specifies the typre of data to receive
+     */
+
+    //as this is only for string data
+    int column_no=2;
+        String send = null;
+        SQLiteDatabase db = open();
+        Cursor cursor = db.query("cached_images",
+                new String[]{"_id", "images","redirect_link"},
+                null,
+                null, null, null, null
+        );
+        if (cursor.moveToFirst()) {
+            do {
+
+
+                if (cursor.getInt(0) == row_no) {
+                    send = cursor.getString(column_no);
+                    cursor.close();
+                    return send;
+
+                }
+                cursor.moveToNext();
+
+            } while (!cursor.isAfterLast());
+        }
         cursor.close();
         return send;
     }
-    private  String getDataAccToRequest(Cursor cursor, String request){
-        switch (request){
-            case "images":
-                String s=getEntry(cursor,1);
-                return getEntry(cursor,1);
-            case "redirect":
-                return getEntry(cursor,2);
 
-            default:
-                return null;
+    //request specifies the data required by the caller
 
-        }
-    }
-    private String getEntry(Cursor cursor,int column_no){
-        String queried_data=null;
-        if(cursor.moveToFirst()) {
-            do{
-                queried_data=cursor.getString(column_no);
-                cursor.moveToNext();
-
-            }while(!cursor.isAfterLast());
-        }
-        return  queried_data;
-    }
 
 }

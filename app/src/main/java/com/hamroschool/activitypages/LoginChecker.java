@@ -13,7 +13,7 @@ import android.os.Bundle;
 public class LoginChecker extends AppCompatActivity {
 
     private static final String PREF_NAME = "LOGIN_PREF";
-
+    private static final String PREF_NAME_ADS_SYNCED = "HAS_ADS_SYNCED";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -24,6 +24,8 @@ public class LoginChecker extends AppCompatActivity {
 //Get "hasLoggedIn" value. If the value doesn't exist yet false is returned
         boolean hasLoggedIn = settings.getBoolean("hasLoggedIn", false);
 
+
+        //this is if the to check if ads have synced or not
         if (hasLoggedIn) {
             //if user is currently logged in;
             //Go directly to main activity.
