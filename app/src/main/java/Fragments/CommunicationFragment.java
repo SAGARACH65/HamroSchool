@@ -91,18 +91,23 @@ public class CommunicationFragment extends Fragment {
             }
         });
 
-
+        Bitmap image_bitmap_data;
         SharedPreferences settings = getContext().getSharedPreferences(PREF_NAME_ADS_SYNCED, 0);
         boolean has_ads_synced = settings.getBoolean("hasSynced", false);
         if (has_ads_synced) {
             //showing ads
             GetTotalEntriesInDB total = new GetTotalEntriesInDB();
             int no_of_entries = total.getTotalEntries(getContext());
+
             SelectWhichAdTOShow select = new SelectWhichAdTOShow();
             int which_ad = select.select_which_ad(no_of_entries);
             //getting bitmap and redirect link of that ad
             ShowAds adsData = new ShowAds(getContext());
-            Bitmap image_bitmap_data = adsData.getBitmap(which_ad);
+         //this is  for the rare case that can occour when while converting process of image network fails
+
+             try {
+              image_bitmap_data = adsData.getBitmap(which_ad);
+
             final String redirect_link = adsData.getRedirectLink(which_ad);
 
             //show the ad in imageview
@@ -120,6 +125,15 @@ public class CommunicationFragment extends Fragment {
                     startActivity(intent);
                 }
             });
+
+           }catch (NullPointerException e){
+               SharedPreferences has_ads_synced1 = getContext().getSharedPreferences(PREF_NAME_ADS_SYNCED, 0);
+               SharedPreferences.Editor editor2 = has_ads_synced1.edit();
+               editor2.putBoolean("hasSynced", false);
+               editor2.apply();
+        }
+
+
         }
 
 

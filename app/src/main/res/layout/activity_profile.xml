@@ -38,8 +38,8 @@
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="380dp"
-        android:layout_below="@+id/imageViewProfile"
-        android:layout_alignParentStart="true">
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/imageViewProfile">
 
         <TableLayout
             android:id="@+id/main_table"

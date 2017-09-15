@@ -21,15 +21,18 @@ public class ShowAds {
         this.context = context;
     }
 
-    public Bitmap getBitmap(int row_no) {
+    public Bitmap getBitmap(int row_no) throws NullPointerException{
 
         //showing random ad
 
         DBReceivedCachedImages dbr = new DBReceivedCachedImages(context);
 
-        byte[] ad_to_show = dbr.getDataBitmap(row_no);
-        //converting the byte array back into bitstream
-        return BitmapFactory.decodeByteArray(ad_to_show, 0, ad_to_show.length);
+    byte[] ad_to_show = dbr.getDataBitmap(row_no);
+    //converting the byte array back into bitstream
+
+
+    return BitmapFactory.decodeByteArray(ad_to_show, 0, ad_to_show.length);
+
     }
 
 

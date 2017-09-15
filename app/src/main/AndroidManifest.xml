@@ -60,6 +60,9 @@
         <service
             android:name="service.AdChangeCheckerService"
             android:exported="false" />
+        <service
+            android:name="service.TeacherAttendanceListService"
+            android:exported="false" />
 
         <activity android:name=".ShowMessage">
             android:screenOrientation="portrait"

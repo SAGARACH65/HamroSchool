@@ -50,8 +50,6 @@ private boolean is_Network_lost=false;
     private void readAdvertisement(XmlPullParser parser) throws IOException, XmlPullParserException {
 
 
-
-
             String ad = null, redirect = null;
             parser.require(XmlPullParser.START_TAG, ns, "ads");
             parser.next();

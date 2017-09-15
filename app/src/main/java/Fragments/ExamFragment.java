@@ -74,6 +74,7 @@ public class ExamFragment extends Fragment {
             int which_ad = select.select_which_ad(no_of_entries);
             //getting bitmap and redirect link of that ad
             ShowAds adsData = new ShowAds(getContext());
+           try{
             Bitmap image_bitmap_data = adsData.getBitmap(which_ad);
             final String redirect_link = adsData.getRedirectLink(which_ad);
 
@@ -92,6 +93,12 @@ public class ExamFragment extends Fragment {
                     startActivity(intent);
                 }
             });
+        }catch (NullPointerException e){
+            SharedPreferences has_ads_synced1 = getContext().getSharedPreferences(PREF_NAME_ADS_SYNCED, 0);
+            SharedPreferences.Editor editor2 = has_ads_synced1.edit();
+            editor2.putBoolean("hasSynced", false);
+            editor2.apply();
+        }
         }
 
         return view;

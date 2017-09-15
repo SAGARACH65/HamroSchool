@@ -308,7 +308,8 @@ public class MainActivity extends AppCompatActivity {
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putBoolean("hasLoggedIn", false);
                                 editor.apply();
-
+                                //stopping the previous services
+                                stopService(new Intent(getApplicationContext(), AdChangeCheckerService.class));
                                 stopService(new Intent(getApplicationContext(), PollService.class));
                                 Intent intent = new Intent(MainActivity.this, LoginChecker.class);
                                 startActivity(intent);

@@ -14,7 +14,7 @@
     <string name="logout">Logout</string>
     <string name="authenticating">Authenticating Please Wait....</string>
     <string name="profile_school">Profile In School Record</string>
-
+<string name="save">Save</string>
 
     <!--For Profile-->
     <string name="Student_Name">Student\'s Name:</string>
@@ -78,7 +78,7 @@
 
 
     <!--for teachers attendance>-->
-    <string name="roll">Roll No:</string>
+    <string name="roll">Roll No</string>
     <string name="present">Present</string>
     <string name="abscent">Abscent</string>
 

@@ -58,11 +58,21 @@
 
 
     </TableRow>
-    <ScrollView
+
+    <TextView
+        android:id="@+id/date_table"
         android:layout_width="match_parent"
-        android:layout_below="@+id/info_bar"
-        android:layout_height="489dp"
-        android:id="@+id/scroll_view">
+        android:layout_height="28dp"
+        android:layout_below="@id/info_bar"
+        android:textColor="@color/black"
+        android:textSize="23sp" />
+
+    <ScrollView
+        android:id="@+id/scroll_view"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:layout_below="@+id/date_table">
+
         <TableLayout
             android:id="@+id/attendance_sheet"
             android:layout_width="wrap_content"
@@ -74,12 +84,21 @@
         </TableLayout>
     </ScrollView>
 
+    <Button
+        android:id="@+id/save_button"
+        android:layout_width="wrap_content"
+        android:layout_height="61dp"
+        android:layout_below="@+id/scroll_view"
+        android:layout_centerHorizontal="true"
+        android:gravity="center"
+        android:text="@string/save"
+        android:textColor="@color/black"
+        android:textSize="20sp" />
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_below="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:layout_alignParentBottom="true"
-        />
+        android:layout_below="@+id/save_button" />
 </RelativeLayout>

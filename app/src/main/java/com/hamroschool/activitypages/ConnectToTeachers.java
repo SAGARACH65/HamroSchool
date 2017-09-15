@@ -27,6 +27,7 @@ import Ads.SelectWhichAdTOShow;
 import Ads.ShowAds;
 import Database.DBReceivedCachedImages;
 import Database.DBReceiverForConnectToTeachers;
+import service.AdChangeCheckerService;
 import service.PollService;
 import utility.Utility;
 
@@ -55,6 +56,7 @@ public class ConnectToTeachers extends AppCompatActivity {
         boolean hasLogged = settings1.getBoolean("hasLoggedIn", false);
         if (!hasLogged) {
             stopService(new Intent(getApplicationContext(), PollService.class));
+            stopService(new Intent(getApplicationContext(), AdChangeCheckerService.class));
             Intent intent = new Intent(getApplicationContext(), LoginPage.class);
             //  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
@@ -141,6 +143,7 @@ public class ConnectToTeachers extends AppCompatActivity {
             int which_ad = select.select_which_ad(no_of_entries);
             //getting bitmap and redirect link of that ad
             ShowAds adsData = new ShowAds(getApplicationContext());
+           try{
             Bitmap image_bitmap_data = adsData.getBitmap(which_ad);
             final String redirect_link = adsData.getRedirectLink(which_ad);
 
@@ -159,6 +162,12 @@ public class ConnectToTeachers extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
+        }catch (NullPointerException e){
+            SharedPreferences has_ads_synced1 = getSharedPreferences(PREF_NAME_ADS_SYNCED, 0);
+            SharedPreferences.Editor editor2 = has_ads_synced1.edit();
+            editor2.putBoolean("hasSynced", false);
+            editor2.apply();
+        }
         }
     }
 

@@ -25,6 +25,7 @@ import Ads.SelectWhichAdTOShow;
 import Ads.ShowAds;
 import Database.DBReceivedCachedImages;
 import Database.DBReceiverForExams;
+import service.AdChangeCheckerService;
 import service.PollService;
 import utility.Utility;
 
@@ -43,19 +44,11 @@ public class Exams extends AppCompatActivity {
         toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         TextView title_bar = (TextView) findViewById(R.id.mainToolBar);
+
+
         title_bar.setText(R.string.Exams);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        SharedPreferences settings1 = getSharedPreferences(PREF_NAME, 0);
-//Get "hasLoggedIn" value. If the value doesn't exist yet false is returned
-        boolean hasLogged = settings1.getBoolean("hasLoggedIn", false);
-        if (!hasLogged) {
-            stopService(new Intent(getApplicationContext(), PollService.class));
-            Intent intent = new Intent(getApplicationContext(), LoginPage.class);
-            //  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            startActivity(intent);
-            finish();
-        }
+        isLoggedIn();
 
         DBReceiverForExams received = new DBReceiverForExams(getApplicationContext());
         int count = received.getNoOfData();
@@ -121,6 +114,12 @@ public class Exams extends AppCompatActivity {
             tabLayout.addView(row, i);
 
         }
+        checkAndStoreAds();
+
+
+    }
+
+    private void checkAndStoreAds() {
         //showing ads
         SharedPreferences settings = getSharedPreferences(PREF_NAME_ADS_SYNCED, 0);
         boolean has_ads_synced = settings.getBoolean("hasSynced", false);
@@ -131,26 +130,48 @@ public class Exams extends AppCompatActivity {
             int which_ad = select.select_which_ad(no_of_entries);
             //getting bitmap and redirect link of that ad
             ShowAds adsData = new ShowAds(getApplicationContext());
-            Bitmap image_bitmap_data = adsData.getBitmap(which_ad);
-            final String redirect_link = adsData.getRedirectLink(which_ad);
+            try {
+                Bitmap image_bitmap_data = adsData.getBitmap(which_ad);
+                final String redirect_link = adsData.getRedirectLink(which_ad);
 
-            //show the ad in imageview
-            ImageView img = (ImageView) findViewById(R.id.imageView);
-            img.setScaleType(ImageView.ScaleType.FIT_XY);
-            img.setImageBitmap(image_bitmap_data);
+                //show the ad in imageview
+                ImageView img = (ImageView) findViewById(R.id.imageView);
+                img.setScaleType(ImageView.ScaleType.FIT_XY);
+                img.setImageBitmap(image_bitmap_data);
 
-            //redirect link for the ad
-            img.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    Intent intent = new Intent();
-                    intent.setAction(Intent.ACTION_VIEW);
-                    intent.addCategory(Intent.CATEGORY_BROWSABLE);
-                    intent.setData(Uri.parse(redirect_link));
-                    startActivity(intent);
-                }
-            });
+                //redirect link for the ad
+                img.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_VIEW);
+                        intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                        intent.setData(Uri.parse(redirect_link));
+                        startActivity(intent);
+                    }
+                });
+            } catch (NullPointerException e) {
+                SharedPreferences has_ads_synced1 = getSharedPreferences(PREF_NAME_ADS_SYNCED, 0);
+                SharedPreferences.Editor editor2 = has_ads_synced1.edit();
+                editor2.putBoolean("hasSynced", false);
+                editor2.apply();
+            }
         }
+    }
 
+    private void isLoggedIn() {
+        SharedPreferences settings1 = getSharedPreferences(PREF_NAME, 0);
+//Get "hasLoggedIn" value. If the value doesn't exist yet false is returned
+        boolean hasLogged = settings1.getBoolean("hasLoggedIn", false);
+        if (!hasLogged) {
+            stopService(new Intent(getApplicationContext(), PollService.class));
+            stopService(new Intent(getApplicationContext(), AdChangeCheckerService.class));
+
+            Intent intent = new Intent(getApplicationContext(), LoginPage.class);
+            //  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+        }
     }
 
     View.OnClickListener mlistner = new View.OnClickListener() {

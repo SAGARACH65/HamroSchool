@@ -14,7 +14,7 @@ public class SelectWhichAdTOShow {
 
         // nextInt is normally exclusive of the top value,
         // so add 1 to make it inclusive
-int s=rand.nextInt((max - min) + 1) + min;
+        int s = rand.nextInt((max - min) + 1) + min;
         return rand.nextInt((max - min) + 1) + min;
     }
 }

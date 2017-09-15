@@ -25,6 +25,8 @@ import Ads.SelectWhichAdTOShow;
 import Ads.ShowAds;
 import Database.DBReceivedCachedImages;
 import Database.DBReceiverForAttendance;
+import service.AdChangeCheckerService;
+import service.PollService;
 import utility.Utility;
 
 public class AttendenceRecord extends AppCompatActivity {
@@ -36,9 +38,6 @@ public class AttendenceRecord extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_attendence_record);
 
-        SharedPreferences settings1 = getSharedPreferences(PREF_NAME, 0);
-//Get "hasLoggedIn" value. If the value doesn't exist yet false is returned
-        boolean hasLogged = settings1.getBoolean("hasLoggedIn", false);
 
         TableLayout tabLayout = (TableLayout) findViewById(R.id.main_table);
         //setting up toolbar
@@ -48,11 +47,15 @@ public class AttendenceRecord extends AppCompatActivity {
         TextView title_bar = (TextView) findViewById(R.id.mainToolBar);
         title_bar.setText(R.string.attendence_record);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        isLoggedIn();
+
 
         DBReceiverForAttendance received = new DBReceiverForAttendance(getApplicationContext());
 
         int count = 0;
 
+
+        //splitting the received attendance record according to its format
         ArrayList<String> date = new ArrayList<String>();
         ArrayList<String> attendence_status = new ArrayList<String>();
 
@@ -116,7 +119,12 @@ public class AttendenceRecord extends AppCompatActivity {
 
             tabLayout.addView(row, i);
         }
+        checkAndStoreAds();
 
+
+    }
+
+    private void checkAndStoreAds() {
         //showing ads
         SharedPreferences settings = getSharedPreferences(PREF_NAME_ADS_SYNCED, 0);
         boolean has_ads_synced = settings.getBoolean("hasSynced", false);
@@ -126,7 +134,9 @@ public class AttendenceRecord extends AppCompatActivity {
             SelectWhichAdTOShow select = new SelectWhichAdTOShow();
             int which_ad = select.select_which_ad(no_of_entries);
             //getting bitmap and redirect link of that ad
+
             ShowAds adsData = new ShowAds(getApplicationContext());
+           try{
             Bitmap image_bitmap_data = adsData.getBitmap(which_ad);
             final String redirect_link = adsData.getRedirectLink(which_ad);
 
@@ -145,8 +155,30 @@ public class AttendenceRecord extends AppCompatActivity {
                     startActivity(intent);
                 }
             });
+        }catch (NullPointerException e){
+            SharedPreferences has_ads_synced1 = getSharedPreferences(PREF_NAME_ADS_SYNCED, 0);
+            SharedPreferences.Editor editor2 = has_ads_synced1.edit();
+            editor2.putBoolean("hasSynced", false);
+            editor2.apply();
         }
 
+        }
+    }
+
+    private void isLoggedIn() {
+        //logging out if token has changed
+        SharedPreferences settings1 = getSharedPreferences(PREF_NAME, 0);
+//Get "hasLoggedIn" value. If the value doesn't exist yet false is returned
+        boolean hasLogged = settings1.getBoolean("hasLoggedIn", false);
+        if (!hasLogged) {
+            stopService(new Intent(getApplicationContext(), PollService.class));
+            stopService(new Intent(getApplicationContext(), AdChangeCheckerService.class));
+            Intent intent = new Intent(getApplicationContext(), LoginPage.class);
+            //  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+        }
     }
 
     @Override

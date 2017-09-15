@@ -71,7 +71,7 @@ public class Database extends SQLiteOpenHelper {
 
         db.execSQL("CREATE TABLE " + TABLE_EXAMS + "("
                 + "_id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                +"Result_type TEXT,"
+                + "Result_type TEXT,"
                 + "Class TEXT,"
                 + "Exam_Type TEXT,"
                 + "Date TEXT,"
@@ -104,13 +104,14 @@ public class Database extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + CLASS_TEACHER + "("
                 + "_id INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + "Name TEXT,"
+                + "Current_date TEXT,"
                 + "students_info TEXT);");
 
-        //TODO look later what fields are present in xml annd edit
+
         db.execSQL("CREATE TABLE " + PARENT_TEACHER_CHAT + "("
                 + "_id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                + "Name TEXT,"
-                + "students_info TEXT);");
+                + "Name_of_teacher TEXT,"
+                + "Chat_history TEXT);");
 
         //to check if the ads of profile has synced or not
 

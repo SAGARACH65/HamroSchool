@@ -37,4 +37,9 @@
     <!--dimes GPA-->
     <dimen name="subject_GPA">250dp</dimen>
     <dimen name="gpa">70dp</dimen>
+    <!--tacher attendance-->
+    <dimen name="student_name">155dp</dimen>
+    <dimen name="roll_no">65dp</dimen>
+    <dimen name="present_abscent">65dp</dimen>
+
 </resources>

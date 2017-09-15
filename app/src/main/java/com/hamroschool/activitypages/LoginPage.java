@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 
+import android.os.Handler;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -29,6 +30,8 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Scanner;
 
+import Database.DBStoreCachedImages;
+import Database.DBStoreChatHistory;
 import Database.DataStoreInDBConnectTeachers;
 import Database.DataStoreInDBExams;
 import Database.DataStoreInDBFAttendanceRecord;
@@ -36,6 +39,7 @@ import Database.DataStoreInDBFeeRecord;
 import Database.DataStoreInDBProfile;
 import Database.DataStoreInTokenAndUserType;
 import Database.DataStoreInDBrNotices;
+import Database.DataStoreTeacherAttendance;
 import service.AdChangeCheckerService;
 import service.PollService;
 import utility.Utility;
@@ -70,21 +74,9 @@ public class LoginPage extends AppCompatActivity {
         stopService(new Intent(getApplicationContext(), AdChangeCheckerService.class));
 
 
-        //clearing all the databases to ensure new data is only inserted
-        DataStoreInDBExams dbs = new DataStoreInDBExams(getApplicationContext());
-        DataStoreInDBConnectTeachers dbc = new DataStoreInDBConnectTeachers(getApplicationContext());
-        DataStoreInDBFeeRecord dbf = new DataStoreInDBFeeRecord(getApplicationContext());
-        DataStoreInDBFAttendanceRecord dba = new DataStoreInDBFAttendanceRecord(getApplicationContext());
-        DataStoreInDBProfile dbp = new DataStoreInDBProfile(getApplicationContext());
-        DataStoreInDBrNotices dbn = new DataStoreInDBrNotices(getApplicationContext());
-        DataStoreInTokenAndUserType dunp = new DataStoreInTokenAndUserType(getApplicationContext());
-        dbs.storeStudenInfo(" ", " ", " ", " ", " ", " ", " "," ","", true, true);
-        dbc.storeTeacherInformation(" ", " ", " ", " ", true, true);
-        dbf.storeFeeRecord(" ", " ", " ", " ", " ", true, true);
-        dbp.storeStudenInfo(" ", " ", null, true, true);
-        dbn.storeNoticeRecord(" ", " ", " ", " ", true, true);
-        dba.storeAttendanceRecord("", true, true);
-        dunp.storeXML("", true, true);
+        //clearing all the databases to ensure new data is only inserted in case some cases datamaynot be cleared
+        clearAllTheDatabase();
+
 
         Button button = (Button) findViewById(R.id.btn_login);
         button.setOnClickListener(new View.OnClickListener() {
@@ -127,6 +119,29 @@ public class LoginPage extends AppCompatActivity {
             }
         });
 
+    }
+
+    private void clearAllTheDatabase() {
+        DataStoreInDBExams dbs = new DataStoreInDBExams(getApplicationContext());
+        DataStoreInDBConnectTeachers dbc = new DataStoreInDBConnectTeachers(getApplicationContext());
+        DataStoreInDBFeeRecord dbf = new DataStoreInDBFeeRecord(getApplicationContext());
+        DataStoreInDBFAttendanceRecord dba = new DataStoreInDBFAttendanceRecord(getApplicationContext());
+        DataStoreInDBProfile dbp = new DataStoreInDBProfile(getApplicationContext());
+        DataStoreInDBrNotices dbn = new DataStoreInDBrNotices(getApplicationContext());
+        DataStoreInTokenAndUserType dunp = new DataStoreInTokenAndUserType(getApplicationContext());
+        DBStoreCachedImages dbsa=new DBStoreCachedImages(getApplicationContext());
+        DataStoreTeacherAttendance dsar=new DataStoreTeacherAttendance(getApplicationContext());
+        DBStoreChatHistory dbsch=new DBStoreChatHistory(getApplicationContext());
+        dbs.storeStudenInfo(" ", " ", " ", " ", " ", " ", " "," ","", true, true);
+        dbc.storeTeacherInformation(" ", " ", " ", " ", true, true);
+        dbf.storeFeeRecord(" ", " ", " ", " ", " ", true, true);
+        dbp.storeStudenInfo(" ", " ", null, true, true);
+        dbn.storeNoticeRecord(" ", " ", " ", " ", true, true);
+        dba.storeAttendanceRecord("", true, true);
+        dunp.storeXML(" ", true, true);
+        dsar.storeTeacherInfo(" "," "," ",true,true);
+        dbsa.storeAdlinks(null,"",true,true);
+        dbsch.storeChatHistory(" "," ",true,true);
     }
 
     private boolean isempty(EditText et1) {
@@ -330,6 +345,26 @@ public class LoginPage extends AppCompatActivity {
         DataStoreInTokenAndUserType store = new DataStoreInTokenAndUserType(getApplicationContext());
         store.storeUserNameAndPassword(token, user_type, true);
 
+    }
+    boolean doubleBackToExitPressedOnce = false;
+
+    @Override
+    public void onBackPressed() {
+        if (doubleBackToExitPressedOnce) {
+            super.onBackPressed();
+            return;
+        }
+
+        this.doubleBackToExitPressedOnce = true;
+        Toast.makeText(this, "Please click BACK again to exit", Toast.LENGTH_SHORT).show();
+
+        new Handler().postDelayed(new Runnable() {
+
+            @Override
+            public void run() {
+                doubleBackToExitPressedOnce = false;
+            }
+        }, 2000);
     }
 
 }
