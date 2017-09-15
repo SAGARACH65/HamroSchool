@@ -33,6 +33,9 @@ public class HamroSchoolXmlParser {
         this.mContext = context;
     }
 
+
+    //this is only called when user loggs in for the first time
+    //t constructs xmlpull parser. but background service does this by itself
     public void parse(InputStream in) throws XmlPullParserException, IOException {
         try {
             XmlPullParser parser = Xml.newPullParser();
@@ -45,7 +48,7 @@ public class HamroSchoolXmlParser {
             in.close();
         }
     }
-
+//this is called by the service directly
     private void readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
 
         String name = parser.getName();

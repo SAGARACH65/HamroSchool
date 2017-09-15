@@ -7,6 +7,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.graphics.drawable.DrawableCompat;
@@ -26,19 +27,38 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import Ads.GetTotalEntriesInDB;
 import Ads.SelectWhichAdTOShow;
 import Ads.ShowAds;
+import Database.DBReceiveTokenAndUserType;
+import Database.DBReceiverForProfile;
 import Database.DBReceiverTeacherAttendance;
+import Database.DataStoreInTokenAndUserType;
 import service.AdChangeCheckerService;
 import service.PollService;
+import service.TeacherAttendanceListService;
+import xmlparser.HamroSchoolXmlParser;
+import xmlparser.XMLParserForTeachers;
 
 
 public class TeacherAttendence extends AppCompatActivity {
     private static final String PREF_NAME_ADS_SYNCED = "HAS_ADS_SYNCED";
     private static final String PREF_NAME = "LOGIN_PREF";
+    private String urll = "http://www.hamroschool.net/myschoolapp/loginapi/teacherservice.php?usertoken=";
+    private String result;
+    private static final String PREF_NAME_FIRST_LOGIN = "FIRST LOGIN";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +70,28 @@ public class TeacherAttendence extends AppCompatActivity {
         toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         TextView title_bar = (TextView) findViewById(R.id.mainToolBar);
+
+
+        SharedPreferences settings = getSharedPreferences(PREF_NAME_FIRST_LOGIN, 0);
+//Get "hasLoggedIn" value. If the value doesn't exist yet false is returned
+        boolean firstlogin = settings.getBoolean("isfirst", false);
+        if (firstlogin) {
+            TeacherAttendence.ConnectToServer connect = new TeacherAttendence.ConnectToServer();
+            connect.execute("sagar");
+
+            SharedPreferences sharedPreferences = getSharedPreferences(PREF_NAME_FIRST_LOGIN, 0);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("isfirst", false);
+            editor.apply();
+
+        }
+
+
+        //starts the services of this class
+        startService();
+
         ///putting the teachers name in the titlebar
+
         DBReceiverTeacherAttendance receive = new DBReceiverTeacherAttendance(getApplicationContext());
         title_bar.setText(receive.getData("Name"));
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -59,6 +100,11 @@ public class TeacherAttendence extends AppCompatActivity {
         showAds();
         showAttendanceSheetAndSendToServer();
 
+    }
+
+    private void startService() {
+        TeacherAttendanceListService.setServiceAlarm(getApplicationContext(), true);
+        AdChangeCheckerService.setServiceAlarm(getApplicationContext(), true);
     }
 
     private void showAttendanceSheetAndSendToServer() {
@@ -140,6 +186,95 @@ public class TeacherAttendence extends AppCompatActivity {
 
     }
 
+    private class ConnectToServer extends AsyncTask<String, String, String> {
+
+
+        @Override
+        protected void onPreExecute() {
+            //has access to main thread(i.e UI thread)
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            //all code here runs in background thread
+            DBReceiveTokenAndUserType rec = new DBReceiveTokenAndUserType(getApplicationContext());
+            //1 is for getting token 2 is for getting user type
+            String token = rec.getTokenAndLoginPersonType(1);
+            urll = urll + token;
+            URL url = null;
+            try {
+                url = new URL(urll);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            HttpURLConnection urlConnection = null;
+            try {
+                urlConnection = (HttpURLConnection) url.openConnection();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (urlConnection.getResponseCode() == 200) {
+                    urlConnection.setConnectTimeout(5 * 1000);
+
+                    try {
+
+                        int statusCode = urlConnection.getResponseCode();
+
+                        InputStream in;
+
+                        if (statusCode >= 200 && statusCode < 400) {
+                            // Create an InputStream in order to extract the response object
+                            in = new BufferedInputStream(urlConnection.getInputStream());
+                        } else {
+
+                            in = new BufferedInputStream(urlConnection.getErrorStream());
+                        }
+                        Scanner s = new Scanner(in).useDelimiter("\\A");
+                        result = s.hasNext() ? s.next() : "";
+                        // received = readStream(in);
+
+
+                    } finally {
+
+                        urlConnection.disconnect();
+                    }
+                } else {
+                    urlConnection.disconnect();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            XMLParserForTeachers hp = new XMLParserForTeachers(getApplicationContext());
+
+            try {
+                InputStream stream = new ByteArrayInputStream(result.getBytes());
+                hp.parse(stream);
+
+            } catch (XmlPullParserException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return "sa";
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            //setting name of the teacher on top of the toolbar
+            TextView title_bar = (TextView) findViewById(R.id.mainToolBar);
+            DBReceiverTeacherAttendance receive = new DBReceiverTeacherAttendance(getApplicationContext());
+            title_bar.setText(receive.getData("Name"));
+
+
+        }
+
+    }
+
     private void showDate(String date) {
         TextView date_textview = (TextView) findViewById(R.id.date_table);
         String text_to_set = "Todays's Date:" + "  " + date;
@@ -152,13 +287,19 @@ public class TeacherAttendence extends AppCompatActivity {
 //Get "hasLoggedIn" value. If the value doesn't exist yet false is returned
         boolean hasLogged = settings1.getBoolean("hasLoggedIn", false);
         if (!hasLogged) {
-            stopService(new Intent(getApplicationContext(), PollService.class));
+            //stop the currently running services
+            stopServices();
             Intent intent = new Intent(getApplicationContext(), LoginPage.class);
             //  intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
             startActivity(intent);
             finish();
         }
+    }
+
+    private void stopServices() {
+        stopService(new Intent(getApplicationContext(), TeacherAttendanceListService.class));
+        stopService(new Intent(getApplicationContext(), PollService.class));
     }
 
     private void showAds() {
@@ -250,8 +391,8 @@ public class TeacherAttendence extends AppCompatActivity {
                                 SharedPreferences.Editor editor = sharedPreferences.edit();
                                 editor.putBoolean("hasLoggedIn", false);
                                 editor.apply();
-//TODO change this later with new teachers service
 
+                                stopService(new Intent(getApplicationContext(), TeacherAttendanceListService.class));
                                 stopService(new Intent(getApplicationContext(), AdChangeCheckerService.class));
                                 Intent intent = new Intent(TeacherAttendence.this, LoginChecker.class);
                                 startActivity(intent);

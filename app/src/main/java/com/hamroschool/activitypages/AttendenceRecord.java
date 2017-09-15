@@ -47,6 +47,8 @@ public class AttendenceRecord extends AppCompatActivity {
         TextView title_bar = (TextView) findViewById(R.id.mainToolBar);
         title_bar.setText(R.string.attendence_record);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //check if user is loggen in or not
         isLoggedIn();
 
 

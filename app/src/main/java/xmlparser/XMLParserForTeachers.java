@@ -1,11 +1,13 @@
 package xmlparser;
 
 import android.content.Context;
+import android.util.Xml;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import Database.DataStoreTeacherAttendance;
 
@@ -20,6 +22,20 @@ public class XMLParserForTeachers {
     public XMLParserForTeachers(Context mContext) {
         this.mContext = mContext;
     }
+
+    public void parse(InputStream in) throws XmlPullParserException, IOException {
+        try {
+            XmlPullParser parser = Xml.newPullParser();
+
+            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+            parser.setInput(in, null);
+            readFeedAndStore(parser);
+
+        } finally {
+            in.close();
+        }
+    }
+
 
     public void readFeedAndStore(XmlPullParser parser) throws XmlPullParserException, IOException {
         String name;

@@ -48,6 +48,8 @@ public class Exams extends AppCompatActivity {
 
         title_bar.setText(R.string.Exams);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        //check if user is still logged in
         isLoggedIn();
 
         DBReceiverForExams received = new DBReceiverForExams(getApplicationContext());

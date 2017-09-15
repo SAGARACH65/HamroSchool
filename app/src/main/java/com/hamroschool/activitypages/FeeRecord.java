@@ -45,7 +45,9 @@ public class FeeRecord extends AppCompatActivity {
         title_bar.setText(R.string.fee_record);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //check if user is still logged in
         checkIfLoggedIn();
+
         TableLayout tabLayout = (TableLayout) findViewById(R.id.main_table);
 
         DBReceiverForFeeRecord received = new DBReceiverForFeeRecord(getApplicationContext());

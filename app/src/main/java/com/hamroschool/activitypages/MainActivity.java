@@ -98,8 +98,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
-        PollService.setServiceAlarm(getApplicationContext(), true);
-        AdChangeCheckerService.setServiceAlarm(getApplicationContext(), true);
+        //startservices
+        startServices();
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -118,7 +118,12 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public class ConnectToServer extends AsyncTask<String, String, String> {
+    private void startServices() {
+        PollService.setServiceAlarm(getApplicationContext(), true);
+        AdChangeCheckerService.setServiceAlarm(getApplicationContext(), true);
+    }
+
+    private class ConnectToServer extends AsyncTask<String, String, String> {
 
 
         @Override
