@@ -1,5 +1,6 @@
 package Caching_Tools;
 
+import android.content.Context;
 import android.util.Log;
 
 import java.io.BufferedInputStream;
@@ -8,6 +9,8 @@ import java.io.InputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
+import utility.Utility;
+
 /**
  * Created by Sagar on 9/13/2017.
  */
@@ -15,6 +18,8 @@ import java.net.URLConnection;
 public class ConvertToByteArray {
 
     public byte[] getLogoImage(String url) {
+
+
         try {
 
             URL imageUrl = new URL(url);

@@ -20,6 +20,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import utility.Utility;
 import xmlparser.XMLParserForAds;
 
 /**
@@ -52,7 +53,11 @@ public class AdChangeCheckerService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         try {
-            readAndStoreAds();
+
+            boolean isNetwork = Utility.isNetworkAvailable(getApplicationContext());
+            if (isNetwork) {
+                readAndStoreAds();
+            }
         } catch (IOException e) {
             e.printStackTrace();
         } catch (XmlPullParserException e) {

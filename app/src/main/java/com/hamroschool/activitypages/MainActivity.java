@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
-        //PollService.setServiceAlarm(getApplicationContext(), true);
+        PollService.setServiceAlarm(getApplicationContext(), true);
         AdChangeCheckerService.setServiceAlarm(getApplicationContext(), true);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);

@@ -175,7 +175,7 @@ public class Exams extends AppCompatActivity {
                 intent.putExtras(extras);
                 startActivity(intent);
             } else {
-                    //for GPA
+                //for GPA
                 String marks_sheet = received.getData(m_clicked_positon + 1, 5);
                 String cgpa = received.getData(m_clicked_positon + 1, 9);
                 String comment = received.getData(m_clicked_positon + 1, 8);

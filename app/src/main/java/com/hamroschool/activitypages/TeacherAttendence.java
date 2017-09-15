@@ -23,11 +23,20 @@ public class TeacherAttendence extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_teacher_attendence);
 
-
         Toolbar toolbar;
         toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+
+
+
+
+
+
+
+
 
 
         SharedPreferences settings = getSharedPreferences(PREF_NAME_ADS_SYNCED, 0);

@@ -279,7 +279,7 @@ public class LoginPage extends AppCompatActivity {
                     editor2.putBoolean("hasSynced", false);
                     editor2.apply();
 
-
+                    dialog.dismiss();
                     //selects activity to pass intent according if the user is teacher or parent
                     if (user_type.equals("Parent")) {
                         Intent intent = new Intent(LoginPage.this, MainActivity.class);

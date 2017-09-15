@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import java.sql.Blob;
 import java.util.Random;
 
 import Database.DBReceivedCachedImages;
@@ -25,6 +26,7 @@ public class ShowAds {
         //showing random ad
 
         DBReceivedCachedImages dbr = new DBReceivedCachedImages(context);
+
         byte[] ad_to_show = dbr.getDataBitmap(row_no);
         //converting the byte array back into bitstream
         return BitmapFactory.decodeByteArray(ad_to_show, 0, ad_to_show.length);

@@ -53,7 +53,7 @@
     <ScrollView
         android:id="@+id/scrollview"
         android:layout_width="match_parent"
-        android:layout_height="230dp"
+        android:layout_height="190dp"
         android:layout_below="@id/info_bar">
 
         <TableLayout
@@ -88,7 +88,7 @@
         android:layout_alignTop="@+id/GPA"
         android:textColor="#000000"
 
-        android:textSize="15sp" />
+        android:textSize="17sp" />
 
     <TextView
         android:id="@+id/comment"
@@ -109,7 +109,7 @@
         android:layout_below="@+id/GPA_value"
         android:layout_toEndOf="@+id/comment"
         android:textColor="#000000"
-        android:textSize="15sp" />
+        android:textSize="17sp" />
 
 
 </RelativeLayout>
