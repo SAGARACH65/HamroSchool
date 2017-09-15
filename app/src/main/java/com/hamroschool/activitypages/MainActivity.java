@@ -52,6 +52,7 @@ import Fragments.StudentInfoFragment;
 import service.AdChangeCheckerService;
 import service.PollService;
 import xmlparser.HamroSchoolXmlParser;
+import xmlparser.XMLParserForAds;
 
 public class MainActivity extends AppCompatActivity {
     String urll = "http://www.hamroschool.net/myschoolapp/loginapi/getstudentdetails.php?usertoken=";
@@ -78,8 +79,14 @@ public class MainActivity extends AppCompatActivity {
 //Get "hasLoggedIn" value. If the value doesn't exist yet false is returned
         boolean firstlogin = settings.getBoolean("isfirst", false);
         if (firstlogin) {
-            MainActivity.ConnectToServer connect = new MainActivity.ConnectToServer();
+            MainActivity.ConnectToServerForInformation connect = new MainActivity.ConnectToServerForInformation();
             connect.execute("sagar");
+
+
+
+            MainActivity.ConnectToServerForAds connect_again = new MainActivity.ConnectToServerForAds();
+            connect_again.execute("sagar");;
+
 
             SharedPreferences sharedPreferences = getSharedPreferences(PREF_NAME_FIRST_LOGIN, 0);
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -123,7 +130,98 @@ public class MainActivity extends AppCompatActivity {
         AdChangeCheckerService.setServiceAlarm(getApplicationContext(), true);
     }
 
-    private class ConnectToServer extends AsyncTask<String, String, String> {
+
+    private class ConnectToServerForAds extends AsyncTask<String, String, String> {
+
+
+        @Override
+        protected void onPreExecute() {
+            //has access to main thread(i.e UI thread)
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            //all code here runs in background thread
+            String urla="http://www.hamroschool.net/myschoolapp/loginapi/adservice.php?action=getads";
+            URL url = null;
+            try {
+                url = new URL(urla);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            HttpURLConnection urlConnection = null;
+            try {
+                urlConnection = (HttpURLConnection) url.openConnection();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (urlConnection.getResponseCode() == 200) {
+                    urlConnection.setConnectTimeout(5 * 1000);
+
+                    try {
+
+                        int statusCode = urlConnection.getResponseCode();
+
+                        InputStream in;
+
+                        if (statusCode >= 200 && statusCode < 400) {
+                            // Create an InputStream in order to extract the response object
+                            in = new BufferedInputStream(urlConnection.getInputStream());
+                        } else {
+
+                            in = new BufferedInputStream(urlConnection.getErrorStream());
+                        }
+                        Scanner s = new Scanner(in).useDelimiter("\\A");
+                        result = s.hasNext() ? s.next() : "";
+                        // received = readStream(in);
+
+
+                    } finally {
+
+                        urlConnection.disconnect();
+                    }
+                } else {
+                    urlConnection.disconnect();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            XMLParserForAds hp = new XMLParserForAds(getApplicationContext());
+
+            try {
+                InputStream stream = new ByteArrayInputStream(result.getBytes());
+                hp.parse(stream);
+
+            } catch (XmlPullParserException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+
+            return "sa";
+        }
+
+
+
+
+        @Override
+        protected void onPostExecute(String s) {
+
+        }
+
+    }
+
+
+
+
+
+    private class ConnectToServerForInformation extends AsyncTask<String, String, String> {
 
 
         @Override
@@ -201,6 +299,7 @@ public class MainActivity extends AppCompatActivity {
 
             return "sa";
         }
+
 
         @Override
         protected void onPostExecute(String s) {

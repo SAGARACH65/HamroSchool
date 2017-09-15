@@ -2,11 +2,13 @@ package xmlparser;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Xml;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.IOException;
+import java.io.InputStream;
 
 import Caching_Tools.ConvertToByteArray;
 import Database.DBStoreCachedImages;
@@ -25,6 +27,19 @@ public class XMLParserForAds {
 private boolean is_Network_lost=false;
     public XMLParserForAds(Context mContext) {
         this.mContext = mContext;
+    }
+
+    public void parse(InputStream in) throws XmlPullParserException, IOException {
+        try {
+            XmlPullParser parser = Xml.newPullParser();
+
+            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+            parser.setInput(in, null);
+            readFeedAndStore(parser);
+
+        } finally {
+            in.close();
+        }
     }
 
     public void readFeedAndStore(XmlPullParser parser) throws XmlPullParserException, IOException {

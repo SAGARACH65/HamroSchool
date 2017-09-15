@@ -34,7 +34,7 @@ public class AdChangeCheckerService extends IntentService {
 
 
     private String urll = "http://www.hamroschool.net/myschoolapp/loginapi/adservice.php?action=getads";
-    private static final int POLL_INTERVAL = 1000 * 60;
+    private static final int POLL_INTERVAL = 1000 * 60*10;
     private static final String TAG = "AdChangeCheckerService";
 
     /*@Override
