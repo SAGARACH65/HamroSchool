@@ -27,7 +27,7 @@ public class DBReceiveTokenAndUserType {
     public String getTokenAndLoginPersonType(int whichdata) {
         SQLiteDatabase db = open();
         Cursor cursor = db.query("login_info",
-                new String[]{"_id", "Token", "isteacher_or_parent"},
+                new String[]{"_id", "Token", "isteacher_or_parent",},
                 null,
                 null, null, null, null
         );
@@ -56,7 +56,7 @@ public class DBReceiveTokenAndUserType {
     public String receiveXML() {
         SQLiteDatabase db = open();
         Cursor cursor = db.query("xml_data",
-                new String[]{"_id", "XML"},
+                new String[]{"_id", "XML",},
                 null,
                 null, null, null, null
         );

@@ -15,6 +15,7 @@ import java.text.DecimalFormat;
 public class ExamMarkSheetGPA extends AppCompatActivity {
     private static final String PREF_NAME_ADS_SYNCED = "HAS_ADS_SYNCED";
     private String marks_sheet, CGPA, comment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

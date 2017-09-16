@@ -33,6 +33,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -83,9 +84,9 @@ public class MainActivity extends AppCompatActivity {
             connect.execute("sagar");
 
 
-
             MainActivity.ConnectToServerForAds connect_again = new MainActivity.ConnectToServerForAds();
-            connect_again.execute("sagar");;
+            connect_again.execute("sagar");
+            ;
 
 
             SharedPreferences sharedPreferences = getSharedPreferences(PREF_NAME_FIRST_LOGIN, 0);
@@ -143,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(String... params) {
             //all code here runs in background thread
-            String urla="http://www.hamroschool.net/myschoolapp/loginapi/adservice.php?action=getads";
+            String urla = "http://www.hamroschool.net/myschoolapp/loginapi/adservice.php?action=getads";
             URL url = null;
             try {
                 url = new URL(urla);
@@ -173,9 +174,9 @@ public class MainActivity extends AppCompatActivity {
 
                             in = new BufferedInputStream(urlConnection.getErrorStream());
                         }
-                        Scanner s = new Scanner(in).useDelimiter("\\A");
-                        result = s.hasNext() ? s.next() : "";
-                        // received = readStream(in);
+
+                        //converting inputstream to string
+                        result = readStream(in);
 
 
                     } finally {
@@ -203,11 +204,8 @@ public class MainActivity extends AppCompatActivity {
             }
 
 
-
             return "sa";
         }
-
-
 
 
         @Override
@@ -216,9 +214,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
-
-
 
 
     private class ConnectToServerForInformation extends AsyncTask<String, String, String> {
@@ -266,9 +261,7 @@ public class MainActivity extends AppCompatActivity {
 
                             in = new BufferedInputStream(urlConnection.getErrorStream());
                         }
-                        Scanner s = new Scanner(in).useDelimiter("\\A");
-                        result = s.hasNext() ? s.next() : "";
-                        // received = readStream(in);
+                        result = readStream(in);
 
 
                     } finally {
@@ -285,7 +278,7 @@ public class MainActivity extends AppCompatActivity {
 
             HamroSchoolXmlParser hp = new HamroSchoolXmlParser(getApplicationContext());
             DataStoreInTokenAndUserType db_store = new DataStoreInTokenAndUserType(getApplicationContext());
-            db_store.storeXML(received, true, false);
+            db_store.storeXML(result, true, false);
 
             try {
                 InputStream stream = new ByteArrayInputStream(result.getBytes());
@@ -300,6 +293,15 @@ public class MainActivity extends AppCompatActivity {
             return "sa";
         }
 
+        private String readStream(InputStream in) throws IOException {
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            StringBuilder result = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                result.append(line);
+            }
+            return (result.toString());
+        }
 
         @Override
         protected void onPostExecute(String s) {
@@ -332,7 +334,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    class ViewPagerAdapter extends FragmentPagerAdapter {
+    private class ViewPagerAdapter extends FragmentPagerAdapter {
         private final List<Fragment> mFragmentList = new ArrayList<>();
         private final List<String> mFragmentTitleList = new ArrayList<>();
 

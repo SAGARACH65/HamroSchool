@@ -20,6 +20,7 @@ public class CheckIfXmlDifferent extends ContextWrapper {
         DataStoreInTokenAndUserType db_store = new DataStoreInTokenAndUserType(getApplicationContext());
 
 
+
         DBReceiveTokenAndUserType db_receive = new DBReceiveTokenAndUserType(getApplicationContext());
         String data_in_database = db_receive.receiveXML();
 
