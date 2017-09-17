@@ -19,6 +19,7 @@ public class XMLParserForTeachers {
     private static final String ns = null;
     private boolean complete_flag = false;
     private Context mContext;
+
     public XMLParserForTeachers(Context mContext) {
         this.mContext = mContext;
     }
@@ -49,7 +50,7 @@ public class XMLParserForTeachers {
             }
             name = parser.getName();
             // Starts by looking for the entry tag
-            if (name.equals("students")) {
+            if (name.equals("teachersrecord")) {
                 readInformation(parser);
             } else {
                 skip(parser);
@@ -59,21 +60,32 @@ public class XMLParserForTeachers {
     }
 
     private void readInformation(XmlPullParser parser) throws IOException, XmlPullParserException {
-       String teacher_name=null,current_date=null,students_info=null;
+        String teacher_name = null, current_date = null, students_info = null;
 
-        parser.require(XmlPullParser.START_TAG, ns, "students");
+        parser.require(XmlPullParser.START_TAG, ns, "teachersrecord");
 
         parser.next();
         String tagName = parser.getName();
-        //TODO modify according to the XML
-        teacher_name= readText(parser);
+        current_date = readText(parser);
+        parser.next();
+        teacher_name = readText(parser);
 
-        DataStoreTeacherAttendance store=new DataStoreTeacherAttendance(mContext);
-        store.storeTeacherInfo(teacher_name,current_date,students_info,true,false);
-        complete_flag=true;
+
+        parser.next();
+
+        parser.next();
+        students_info = readText(parser);
+
+        parser.next();
+
+        parser.next();
+
+        parser.require(XmlPullParser.END_TAG, ns, "teachersrecord");
+
+        DataStoreTeacherAttendance store = new DataStoreTeacherAttendance(mContext);
+        store.storeTeacherInfo(teacher_name, current_date, students_info, true, false);
+        complete_flag = true;
     }
-
-
 
 
     private String readText(XmlPullParser parser) throws IOException, XmlPullParserException {

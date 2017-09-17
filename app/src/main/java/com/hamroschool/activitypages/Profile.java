@@ -33,7 +33,7 @@ import utility.Utility;
 public class Profile extends AppCompatActivity {
     private static final String PREF_NAME = "LOGIN_PREF";
     private static final String PREF_NAME_ADS_SYNCED = "HAS_ADS_SYNCED";
-
+    private static final String PREF_NAME_HAS_INFO_SYNCED_FIRST_TIME = "HAS_INFO_SSYNCED_FIRST_TIME";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -48,7 +48,14 @@ public class Profile extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         checkIfLoggedIn();
         //shows the tabs of the Profile table
-        showData();
+
+        SharedPreferences settings1 = getSharedPreferences(PREF_NAME_HAS_INFO_SYNCED_FIRST_TIME, 0);
+
+        boolean hasSynced = settings1.getBoolean("hasInfoSynced", false);
+        if(hasSynced) {
+            showData();
+        }
+
     }
 
     private void checkIfLoggedIn() {

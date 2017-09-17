@@ -59,6 +59,8 @@ public class TeacherAttendence extends AppCompatActivity {
     private String urll = "http://www.hamroschool.net/myschoolapp/loginapi/teacherservice.php?usertoken=";
     private String result;
     private static final String PREF_NAME_FIRST_LOGIN = "FIRST LOGIN";
+    private static final String PREF_NAME_HAS_INFO_SYNCED_FIRST_TIME = "HAS_INFO_SSYNCED_FIRST_TIME";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -98,8 +100,14 @@ public class TeacherAttendence extends AppCompatActivity {
 
         checkIfLoggedIn();
         showAds();
-        showAttendanceSheetAndSendToServer();
 
+
+        SharedPreferences settings1 = getSharedPreferences(PREF_NAME_HAS_INFO_SYNCED_FIRST_TIME, 0);
+
+        boolean hasSynced = settings1.getBoolean("hasInfoSynced", false);
+        if(hasSynced) {
+            showAttendanceSheetAndSendToServer();
+        }
     }
 
     private void startService() {
@@ -270,6 +278,15 @@ public class TeacherAttendence extends AppCompatActivity {
             DBReceiverTeacherAttendance receive = new DBReceiverTeacherAttendance(getApplicationContext());
             title_bar.setText(receive.getData("Name"));
 
+
+            SharedPreferences sharedPreferences = getSharedPreferences(PREF_NAME_HAS_INFO_SYNCED_FIRST_TIME, 0);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean("hasInfoSynced", true);
+            editor.apply();
+
+            //this refreshes the activity by itself
+            finish();
+            startActivity(getIntent());
 
         }
 

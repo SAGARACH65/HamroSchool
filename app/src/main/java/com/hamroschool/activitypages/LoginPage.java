@@ -42,13 +42,14 @@ import Database.DataStoreInDBrNotices;
 import Database.DataStoreTeacherAttendance;
 import service.AdChangeCheckerService;
 import service.PollService;
+import service.TeacherAttendanceListService;
 import utility.Utility;
 
 public class LoginPage extends AppCompatActivity {
 
     private static final String PREF_NAME_FIRST_LOGIN = "FIRST LOGIN";
     private static final String PREF_NAME = "LOGIN_PREF";
-
+    private static final String PREF_NAME_HAS_INFO_SYNCED_FIRST_TIME = "HAS_INFO_SSYNCED_FIRST_TIME";
     private static final String PREF_NAME_ADS_SYNCED = "HAS_ADS_SYNCED";
     private static final String URL = //"http://thenetwebs.com/myschoolapp/schoolapp/loginapi/getstudentdetails.php?usertoken=b6d16986f1d5460e";
 
@@ -72,7 +73,7 @@ public class LoginPage extends AppCompatActivity {
 
         stopService(new Intent(getApplicationContext(), PollService.class));
         stopService(new Intent(getApplicationContext(), AdChangeCheckerService.class));
-
+        stopService(new Intent(getApplicationContext(), TeacherAttendanceListService.class) );
 
         //clearing all the databases to ensure new data is only inserted in case some cases datamaynot be cleared
         clearAllTheDatabase();
@@ -253,7 +254,7 @@ public class LoginPage extends AppCompatActivity {
                             if (bool_token) {
                                 user_type = checker;
                                 bool = "Success";
-                                token = parser.getText();
+                                //token = parser.getText();
 
                                 parser.next();
                                 parser.next();
@@ -278,6 +279,16 @@ public class LoginPage extends AppCompatActivity {
             }
             if (bool.length() != 0) {
                 if (bool.equals("Success")) {
+
+
+                    //for first information sync
+                    SharedPreferences sharedPreferencesFs = getSharedPreferences(PREF_NAME_HAS_INFO_SYNCED_FIRST_TIME, 0);
+                    SharedPreferences.Editor editorFs = sharedPreferencesFs.edit();
+                    editorFs.putBoolean("hasInfoSynced", false);
+                    editorFs.apply();
+
+
+
                     SharedPreferences sharedPreferences = getSharedPreferences(PREF_NAME, 0);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putBoolean("hasLoggedIn", true);
@@ -289,6 +300,8 @@ public class LoginPage extends AppCompatActivity {
                     editor1.putBoolean("isfirst", true);
                     editor1.apply();
 
+
+                    //this is for ads
                     SharedPreferences has_ads_synced = getSharedPreferences(PREF_NAME_ADS_SYNCED, 0);
                     SharedPreferences.Editor editor2 = has_ads_synced.edit();
                     editor2.putBoolean("hasSynced", false);
@@ -301,6 +314,7 @@ public class LoginPage extends AppCompatActivity {
                         startActivity(intent);
                         finish();
                     } else {
+
                         Intent intent = new Intent(LoginPage.this, TeacherAttendence.class);
                         startActivity(intent);
                         finish();

@@ -62,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
     private ViewPager viewPager;
     private static final String PREF_NAME = "LOGIN_PREF";
     private static final String PREF_NAME_FIRST_LOGIN = "FIRST LOGIN";
+    private static final String PREF_NAME_HAS_INFO_SYNCED_FIRST_TIME = "HAS_INFO_SSYNCED_FIRST_TIME";
+
     private String received;
     private String result;
 
@@ -86,13 +88,15 @@ public class MainActivity extends AppCompatActivity {
 
             MainActivity.ConnectToServerForAds connect_again = new MainActivity.ConnectToServerForAds();
             connect_again.execute("sagar");
-            ;
+
 
 
             SharedPreferences sharedPreferences = getSharedPreferences(PREF_NAME_FIRST_LOGIN, 0);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean("isfirst", false);
             editor.apply();
+
+
 
         }
         SharedPreferences settings1 = getSharedPreferences(PREF_NAME, 0);
@@ -309,6 +313,12 @@ public class MainActivity extends AppCompatActivity {
             String name = dbp.getData("School_Name");
             TextView title_bar = (TextView) findViewById(R.id.mainToolBar);
             title_bar.setText(name);
+
+
+            SharedPreferences sharedPreferences1 = getSharedPreferences(PREF_NAME_HAS_INFO_SYNCED_FIRST_TIME, 0);
+            SharedPreferences.Editor editor1 = sharedPreferences1.edit();
+            editor1.putBoolean("hasInfoSynced", true);
+            editor1.apply();
         }
 
     }

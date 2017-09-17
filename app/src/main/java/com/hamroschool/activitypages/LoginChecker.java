@@ -6,6 +6,8 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+import Database.DBReceiveTokenAndUserType;
+
 /**
  * Created by Sagar on 6/7/2017.
  */
@@ -25,11 +27,18 @@ public class LoginChecker extends AppCompatActivity {
         boolean hasLoggedIn = settings.getBoolean("hasLoggedIn", false);
 
 
-        //this is if the to check if ads have synced or not
+
         if (hasLoggedIn) {
             //if user is currently logged in;
             //Go directly to main activity.
-            intent = new Intent(this, MainActivity.class);
+            DBReceiveTokenAndUserType receive=new DBReceiveTokenAndUserType(getApplicationContext());
+           String user_type= receive.getTokenAndLoginPersonType(2);
+            if (user_type.equals("Parent")) {
+                intent = new Intent(this, MainActivity.class);
+            }
+            else{
+                intent = new Intent(this, TeacherAttendence.class);
+            }
 
         } else {
             intent = new Intent(this, LoginPage.class);
