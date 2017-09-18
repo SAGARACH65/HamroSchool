@@ -10,13 +10,20 @@
         android:id="@+id/toolbar"
         layout="@layout/tool_bar" />
 
-
+    <TextView
+        android:id="@+id/date_table"
+        android:layout_width="match_parent"
+        android:layout_height="28dp"
+        android:gravity="center"
+        android:layout_below="@id/toolbar"
+        android:textColor="@color/black"
+        android:textSize="23sp" />
     <TableRow
 
         android:id="@+id/info_bar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/toolbar"
+        android:layout_below="@+id/date_table"
         android:background="@color/colorPrimary"
         android:dividerPadding="3dp"
 
@@ -25,7 +32,7 @@
 
         <TextView
             android:id="@+id/Class"
-            android:layout_width="160dp"
+            android:layout_width="170dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/Student_Name"
@@ -33,7 +40,7 @@
 
         <TextView
             android:id="@+id/tab_exam_type"
-            android:layout_width="70dp"
+            android:layout_width="80dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="5dp"
             android:gravity="center"
@@ -42,36 +49,24 @@
 
         <TextView
             android:id="@+id/tab_date_of_exam"
-            android:layout_width="70dp"
+            android:layout_width="90dp"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/present"
             android:textColor="#fff" />
 
-        <TextView
-            android:id="@+id/controls"
-            android:layout_width="70dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="@string/abscent"
-            android:textColor="#fff" />
+
 
 
     </TableRow>
 
-    <TextView
-        android:id="@+id/date_table"
-        android:layout_width="match_parent"
-        android:layout_height="28dp"
-        android:layout_below="@id/info_bar"
-        android:textColor="@color/black"
-        android:textSize="23sp" />
+
 
     <ScrollView
         android:id="@+id/scroll_view"
         android:layout_width="match_parent"
         android:layout_height="400dp"
-        android:layout_below="@+id/date_table">
+        android:layout_below="@+id/info_bar">
 
         <TableLayout
             android:id="@+id/attendance_sheet"

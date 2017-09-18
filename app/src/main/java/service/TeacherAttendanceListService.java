@@ -5,6 +5,7 @@ import android.app.IntentService;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.util.Xml;
 
@@ -31,6 +32,8 @@ import xmlparser.XMLParserForTeachers;
 
 public class TeacherAttendanceListService extends IntentService {
 
+    private boolean donotcontinue = false;
+    private static final String PREF_NAME = "LOGIN_PREF";
     private static final String TAG = "TeacherAttendanceListService";
     private String urll = "http://www.hamroschool.net/myschoolapp/loginapi/teacherservice.php?usertoken=";
     private static final int POLL_INTERVAL = 1000 * 60;
@@ -69,7 +72,37 @@ public class TeacherAttendanceListService extends IntentService {
 
         }
     }
+    private void checkIfTOqkenChanged(InputStream in) throws XmlPullParserException {
+        XmlPullParser parser = Xml.newPullParser();
+        parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+        parser.setInput(in, null);
+        String checker;
+        int eventType = parser.getEventType();
+        int count = 0;
 
+        while (eventType != XmlPullParser.END_DOCUMENT) {
+            count++;
+            if (count > 20) {
+                break;
+            }
+            if (eventType == XmlPullParser.TEXT) {
+                checker = parser.getText();
+                if (checker.equals("Invalid Access")) {
+                    SharedPreferences sharedPreferences = getSharedPreferences(PREF_NAME, 0);
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putBoolean("hasLoggedIn", false);
+                    editor.apply();
+                    donotcontinue = true;
+                }
+            }
+            try {
+                eventType = parser.next();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+    }
     private void readFromWeb() throws IOException, XmlPullParserException {
         String returned = null;
         URL url = new URL(urll);
@@ -106,15 +139,18 @@ public class TeacherAttendanceListService extends IntentService {
     private void storeInformation(String received) throws IOException, XmlPullParserException {
 
         InputStream stream = new ByteArrayInputStream(received.getBytes());
+        checkIfTOqkenChanged(stream);
+        stream = new ByteArrayInputStream(received.getBytes());
+        if (!donotcontinue) {
 
+            //setting up xml pullparser
+            XmlPullParser parser = Xml.newPullParser();
+            parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+            parser.setInput(stream, null);
 
-        //setting up xml pullparser
-        XmlPullParser parser = Xml.newPullParser();
-        parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
-        parser.setInput(stream, null);
-
-        XMLParserForTeachers xml_parse = new XMLParserForTeachers(getApplicationContext());
-        xml_parse.readFeedAndStore(parser);
+            XMLParserForTeachers xml_parse = new XMLParserForTeachers(getApplicationContext());
+            xml_parse.readFeedAndStore(parser);
+        }
 
     }
 

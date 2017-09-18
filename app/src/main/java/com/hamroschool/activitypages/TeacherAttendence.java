@@ -15,11 +15,15 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Xml;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TableLayout;
@@ -27,6 +31,7 @@ import android.widget.TableRow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
 
 import java.io.BufferedInputStream;
@@ -43,12 +48,14 @@ import Ads.GetTotalEntriesInDB;
 import Ads.SelectWhichAdTOShow;
 import Ads.ShowAds;
 import Database.DBReceiveTokenAndUserType;
+import Database.DBReceiverForExams;
 import Database.DBReceiverForProfile;
 import Database.DBReceiverTeacherAttendance;
 import Database.DataStoreInTokenAndUserType;
 import service.AdChangeCheckerService;
 import service.PollService;
 import service.TeacherAttendanceListService;
+import utility.Utility;
 import xmlparser.HamroSchoolXmlParser;
 import xmlparser.XMLParserForTeachers;
 
@@ -57,11 +64,18 @@ public class TeacherAttendence extends AppCompatActivity {
     private static final String PREF_NAME_ADS_SYNCED = "HAS_ADS_SYNCED";
     private static final String PREF_NAME = "LOGIN_PREF";
     private String urll = "http://www.hamroschool.net/myschoolapp/loginapi/teacherservice.php?usertoken=";
+    private String urll_att = "http://www.hamroschool.net/myschoolapp/loginapi/attendanceupdateservice.php?action=attdupdate&usertoken=";
+    private String att_format = "&attendance=";
     private String result;
     private static final String PREF_NAME_FIRST_LOGIN = "FIRST LOGIN";
     private static final String PREF_NAME_HAS_INFO_SYNCED_FIRST_TIME = "HAS_INFO_SSYNCED_FIRST_TIME";
+    private static String formatted_data = "";
+    private ArrayList<String> attendance_record = new ArrayList<String>();
 
-
+    private ArrayList<String> roll_no = new ArrayList<String>();
+    private ArrayList<String> name_of_student = new ArrayList<String>();
+    private static boolean connection_faliure=false;
+private boolean failed=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,6 +101,8 @@ public class TeacherAttendence extends AppCompatActivity {
             editor.apply();
 
         }
+//listener for save button
+        setOnClickListener();
 
 
         //starts the services of this class
@@ -105,10 +121,183 @@ public class TeacherAttendence extends AppCompatActivity {
         SharedPreferences settings1 = getSharedPreferences(PREF_NAME_HAS_INFO_SYNCED_FIRST_TIME, 0);
 
         boolean hasSynced = settings1.getBoolean("hasInfoSynced", false);
-        if(hasSynced) {
+        if (hasSynced) {
             showAttendanceSheetAndSendToServer();
         }
     }
+
+    private void setOnClickListener() {
+        Button button = (Button) findViewById(R.id.save_button);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+
+                boolean isAvailable = Utility.isNetworkAvailable(TeacherAttendence.this);
+                if (!isAvailable) {
+                    Toast.makeText(getApplicationContext(), "No Internet Connection Available", Toast.LENGTH_LONG).show();
+
+                } else {
+
+                    for (int i = 0; i < attendance_record.size(); i++) {
+
+
+                        formatted_data =formatted_data+ roll_no.get(i) + ":" + attendance_record.get(i);
+
+                        //this is required as the last data cant have a comma
+                        if (i != (attendance_record.size()) - 1) {
+                            formatted_data = formatted_data + ",";
+
+                        }
+                    }
+
+
+                    showDialogBox();
+                }
+
+
+            }
+        });
+    }
+
+    private void showDialogBox() {
+        new AlertDialog.Builder(this)
+                .setTitle("Confirm")
+                .setMessage("Press Yes To Confirm")
+                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        TeacherAttendence.sendDataToServer connect = new TeacherAttendence.sendDataToServer();
+                        connect.execute("sagar");
+                    }
+                })
+                .setNegativeButton(android.R.string.no, null).show();
+    }
+
+
+    private class sendDataToServer extends AsyncTask<String, String, String> {
+
+
+        @Override
+        protected void onPreExecute() {
+            //has access to main thread(i.e UI thread)
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            //all code here runs in background thread
+            DBReceiveTokenAndUserType rec = new DBReceiveTokenAndUserType(getApplicationContext());
+            //1 is for getting token 2 is for getting user type
+            String token = rec.getTokenAndLoginPersonType(1);
+            urll_att = urll_att + token + att_format+ formatted_data;
+            URL url = null;
+            //done so that next time the data will be cleaned
+            formatted_data="";
+            try {
+                url = new URL(urll_att);
+                //clearing it for next version
+                urll_att="";
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            HttpURLConnection urlConnection = null;
+            try {
+                urlConnection = (HttpURLConnection) url.openConnection();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (urlConnection.getResponseCode() == 200) {
+                    urlConnection.setConnectTimeout(5 * 1000);
+
+                    try {
+
+                        int statusCode = urlConnection.getResponseCode();
+
+                        InputStream in;
+
+                        if (statusCode >= 200 && statusCode < 400) {
+                            // Create an InputStream in order to extract the response object
+                            in = new BufferedInputStream(urlConnection.getInputStream());
+                        } else {
+
+                            in = new BufferedInputStream(urlConnection.getErrorStream());
+                        }
+                        Scanner s = new Scanner(in).useDelimiter("\\A");
+                        result = s.hasNext() ? s.next() : "";
+
+
+                    } finally {
+
+                        urlConnection.disconnect();
+                    }
+                } else {
+                    urlConnection.disconnect();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+
+            }
+
+
+            try {
+                XmlPullParser parser = Xml.newPullParser();
+                InputStream stream = new ByteArrayInputStream(result.getBytes());
+
+
+                parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
+                parser.setInput(stream, null);
+                int eventType = parser.getEventType();
+                while (eventType != XmlPullParser.END_DOCUMENT) {
+                    if (eventType == XmlPullParser.TEXT) {
+                        String checker = parser.getText();
+
+
+                        if(checker.equals("Attendance was not successful.")){
+                            failed=true;
+                        }
+
+                    }
+                    eventType = parser.next();
+                }
+
+            } catch (XmlPullParserException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return "sa";
+
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+
+           if(failed){
+                Toast.makeText(getApplicationContext(), "Attendance Couldnot take place. Please try again Later", Toast.LENGTH_LONG).show();
+            } else{
+                Toast.makeText(getApplicationContext(), "Attendance Registered Successfully", Toast.LENGTH_LONG).show();
+
+
+
+                //cereates certain  delay and restarts the activity as attendance has been registered
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //this piece of code is run after 3 seconds i.e. 3000ms
+                        finish();
+                        startActivity(getIntent());
+                    }
+                }, 2000);
+
+
+            }
+        }
+
+    }
+
 
     private void startService() {
         TeacherAttendanceListService.setServiceAlarm(getApplicationContext(), true);
@@ -116,7 +305,7 @@ public class TeacherAttendence extends AppCompatActivity {
     }
 
     private void showAttendanceSheetAndSendToServer() {
-        TableLayout tabLayout = (TableLayout) findViewById(R.id.main_table);
+        TableLayout tabLayout = (TableLayout) findViewById(R.id.attendance_sheet);
         DBReceiverTeacherAttendance receive = new DBReceiverTeacherAttendance(getApplicationContext());
         String date = receive.getData("Current_date");
         String students_info = receive.getData("students_info");
@@ -124,25 +313,12 @@ public class TeacherAttendence extends AppCompatActivity {
         //showing todays current date on the textview
         showDate(date);
 
-        //show the attendance ledger and take attendance
-        int count = 0;
-        //splitting the received data record according to its format
-        ArrayList<String> roll_no = new ArrayList<String>();
-        ArrayList<String> name_of_student = new ArrayList<String>();
+        getListOfRollNoAndName(students_info);
 
-        //example of he received format     25*ananda pudasaini#4*Tinku Raman#12*Laxmi Bai#12*Hiimesh Rimal#
-        String[] split_data = students_info.split("#");
 
-        for (int i = 0; i < split_data.length; i++) {
-            String[] data = split_data[i].split("\\*");
-            roll_no.add(data[0]);
-            name_of_student.add(data[1]);
-            count++;
-        }
-
-        for (int i = 0; i < count; i++) {
+        for (int i = 0; i < roll_no.size(); i++) {
             TableRow row = new TableRow(this);
-            row.setId(1000 + i);
+
             //set the color only for the fields in odd places
             if (i % 2 != 0) {
                 row.setBackgroundColor(getResources().getColor(R.color.viewSplit));
@@ -172,20 +348,18 @@ public class TeacherAttendence extends AppCompatActivity {
             textview2.setText(roll_no.get(i));
 
             //if the student is present color is green
-            RadioButton radioButtonPresent = new RadioButton(this);
-            radioButtonPresent.setHighlightColor(Color.GREEN);
-            dp = getResources().getDimensionPixelSize(R.dimen.present_abscent);
-            radioButtonPresent.setWidth(dp);
-            //if the student is present color is red
-            RadioButton radioButtonAbscent = new RadioButton(this);
-            radioButtonAbscent.setHighlightColor(Color.GREEN);
-            dp = getResources().getDimensionPixelSize(R.dimen.present_abscent);
-            radioButtonAbscent.setWidth(dp);
+            CheckBox checkbox = new CheckBox(this);
+            checkbox.setHighlightColor(Color.GREEN);
+            dp = getResources().getDimensionPixelSize(R.dimen.present);
+            checkbox.setWidth(dp);
+
+
+            checkbox.setId(1000 + i);
+            checkbox.setOnClickListener(mlistner);
 
             row.addView(textview1);
             row.addView(textview2);
-            row.addView(radioButtonPresent);
-            row.addView(radioButtonAbscent);
+            row.addView(checkbox);
 
             tabLayout.addView(row, i);
 
@@ -193,6 +367,46 @@ public class TeacherAttendence extends AppCompatActivity {
         }
 
     }
+
+    private void getListOfRollNoAndName(String students_info) {
+        //show the attendance ledger and take attendance
+
+        //splitting the received data record according to its format
+
+        //example of he received format     25*ananda pudasaini#4*Tinku Raman#12*Laxmi Bai#12*Hiimesh Rimal#
+        String[] split_data = students_info.split("#");
+
+        roll_no.clear();
+        name_of_student.clear();
+        for (int i = 0; i < split_data.length; i++) {
+            String[] data = split_data[i].split("\\*");
+            roll_no.add(data[0]);
+            name_of_student.add(data[1]);
+
+            //first reseting the attendance list to all 0's
+            attendance_record.add("0");
+
+        }
+    }
+
+    View.OnClickListener mlistner = new View.OnClickListener() {
+        int m_clicked_positon;
+
+        public void onClick(View v) {
+            //if token changed logout
+            checkIfLoggedIn();
+            m_clicked_positon = v.getId() - 1000;
+
+            if (attendance_record.get(m_clicked_positon).equals("0")) {
+
+                attendance_record.set(m_clicked_positon, "1");
+            } else {
+
+                attendance_record.set(m_clicked_positon, "0");
+            }
+
+        }
+    };
 
     private class ConnectToServer extends AsyncTask<String, String, String> {
 
@@ -294,7 +508,7 @@ public class TeacherAttendence extends AppCompatActivity {
 
     private void showDate(String date) {
         TextView date_textview = (TextView) findViewById(R.id.date_table);
-        String text_to_set = "Todays's Date:" + "  " + date;
+        String text_to_set = "Today's Date:" + "  " + date;
         date_textview.setText(text_to_set);
     }
 

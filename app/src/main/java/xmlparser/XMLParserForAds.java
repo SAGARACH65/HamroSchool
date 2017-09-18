@@ -104,6 +104,10 @@ private boolean is_Network_lost=false;
                       dsa.storeAdlinks(ad_byte_array, redirect, true, false);
 
                       i++;
+                      SharedPreferences has_ads_synced = mContext.getSharedPreferences(PREF_NAME_ADS_SYNCED, 0);
+                      SharedPreferences.Editor editor2 = has_ads_synced.edit();
+                      editor2.putBoolean("hasSynced", true);
+                      editor2.apply();
                   } else {
                       dsa.storeAdlinks(ad_byte_array, redirect, false, false);
 
@@ -114,10 +118,7 @@ private boolean is_Network_lost=false;
               }
             }
             complete_flag = true;
-            SharedPreferences has_ads_synced = mContext.getSharedPreferences(PREF_NAME_ADS_SYNCED, 0);
-            SharedPreferences.Editor editor2 = has_ads_synced.edit();
-            editor2.putBoolean("hasSynced", true);
-            editor2.apply();
+
 
     }
 
