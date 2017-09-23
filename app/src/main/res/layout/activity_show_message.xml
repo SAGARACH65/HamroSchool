@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.hamroschool.activitypages.ShowMessage">
+    tools:context="com.hamroschool.activitypages.ShowNoticeMessage">
     <include
         android:id="@+id/toolbar"
         layout="@layout/tool_bar" />

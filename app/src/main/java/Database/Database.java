@@ -20,6 +20,7 @@ public class Database extends SQLiteOpenHelper {
 
     private static String TABLE_PROFILE = "student_profile";
     private static String TABLE_XML_DATA = "xml_data";
+    private static String TABLE_XML_DATA_MSG = "xml_data_msg";
     private static String TABLE_NOTICES = "notices";
 
     private static String TABLE_ATTENDANCE = "attendance";
@@ -91,6 +92,11 @@ public class Database extends SQLiteOpenHelper {
         db.execSQL("CREATE TABLE " + TABLE_XML_DATA + "("
                 + "_id INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + "XML TEXT);");
+
+        db.execSQL("CREATE TABLE " + TABLE_XML_DATA_MSG + "("
+                + "_id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                + "XML_MSG TEXT);");
+
         db.execSQL("CREATE TABLE " + TABLE_ATTENDANCE + "("
                 + "_id INTEGER PRIMARY KEY AUTOINCREMENT,"
 

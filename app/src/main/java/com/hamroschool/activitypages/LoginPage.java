@@ -71,9 +71,13 @@ public class LoginPage extends AppCompatActivity {
         setContentView(R.layout.activity_login_page);
 
 
+//        PollService.CancelAlarm(getApplicationContext());
+//        AdChangeCheckerService.CancelAlarm(getApplicationContext());
+//        TeacherAttendanceListService.CancelAlarm(getApplicationContext());
+
         stopService(new Intent(getApplicationContext(), PollService.class));
         stopService(new Intent(getApplicationContext(), AdChangeCheckerService.class));
-        stopService(new Intent(getApplicationContext(), TeacherAttendanceListService.class) );
+        stopService(new Intent(getApplicationContext(), TeacherAttendanceListService.class));
 
         //clearing all the databases to ensure new data is only inserted in case some cases datamaynot be cleared
         clearAllTheDatabase();
@@ -129,20 +133,23 @@ public class LoginPage extends AppCompatActivity {
         DataStoreInDBFAttendanceRecord dba = new DataStoreInDBFAttendanceRecord(getApplicationContext());
         DataStoreInDBProfile dbp = new DataStoreInDBProfile(getApplicationContext());
         DataStoreInDBrNotices dbn = new DataStoreInDBrNotices(getApplicationContext());
+        DataStoreTeacherAttendance dsar = new DataStoreTeacherAttendance(getApplicationContext());
         DataStoreInTokenAndUserType dunp = new DataStoreInTokenAndUserType(getApplicationContext());
-        DBStoreCachedImages dbsa=new DBStoreCachedImages(getApplicationContext());
-        DataStoreTeacherAttendance dsar=new DataStoreTeacherAttendance(getApplicationContext());
-        DBStoreChatHistory dbsch=new DBStoreChatHistory(getApplicationContext());
-        dbs.storeStudenInfo(" ", " ", " ", " ", " ", " ", " "," ","", true, true);
+        DBStoreCachedImages dbsa = new DBStoreCachedImages(getApplicationContext());
+        DBStoreChatHistory dbsch = new DBStoreChatHistory(getApplicationContext());
+
+        dbs.storeStudenInfo(" ", " ", " ", " ", " ", " ", " ", " ", "", true, true);
         dbc.storeTeacherInformation(" ", " ", " ", " ", true, true);
         dbf.storeFeeRecord(" ", " ", " ", " ", " ", true, true);
         dbp.storeStudenInfo(" ", " ", null, true, true);
         dbn.storeNoticeRecord(" ", " ", " ", " ", true, true);
         dba.storeAttendanceRecord("", true, true);
         dunp.storeXML(" ", true, true);
-        dsar.storeTeacherInfo(" "," "," ",true,true);
-        dbsa.storeAdlinks(null,"",true,true);
-        dbsch.storeChatHistory(" "," ",true,true);
+        dunp.storeXMLMSG(" ",true,true);
+        dunp.storeUserNameAndPassword("", "", true);
+        dsar.storeTeacherInfo(" ", " ", " ", true, true);
+        dbsa.storeAdlinks(null, "", true, true);
+        dbsch.storeChatHistory(" ", " ", true, true);
     }
 
     private boolean isempty(EditText et1) {
@@ -288,7 +295,6 @@ public class LoginPage extends AppCompatActivity {
                     editorFs.apply();
 
 
-
                     SharedPreferences sharedPreferences = getSharedPreferences(PREF_NAME, 0);
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putBoolean("hasLoggedIn", true);
@@ -360,6 +366,7 @@ public class LoginPage extends AppCompatActivity {
         store.storeUserNameAndPassword(token, user_type, true);
 
     }
+
     boolean doubleBackToExitPressedOnce = false;
 
     @Override

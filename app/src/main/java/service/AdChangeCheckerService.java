@@ -20,6 +20,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+import Database.DBReceiveTokenAndUserType;
 import utility.Utility;
 import xmlparser.XMLParserForAds;
 
@@ -34,8 +35,9 @@ public class AdChangeCheckerService extends IntentService {
 
 
     private String urll = "http://www.hamroschool.net/myschoolapp/loginapi/adservice.php?action=getads";
-    private static final int POLL_INTERVAL = 1000 * 60*10;
+    private static final int POLL_INTERVAL = 1000 * 60 * 60;
     private static final String TAG = "AdChangeCheckerService";
+    private String user__type;
 
     /*@Override
        public void onCreate() {
@@ -52,19 +54,24 @@ public class AdChangeCheckerService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        try {
 
-            boolean isNetwork = Utility.isNetworkAvailable(getApplicationContext());
-            if (isNetwork) {
-                readAndStoreAds();
+        DBReceiveTokenAndUserType receive = new DBReceiveTokenAndUserType(getApplicationContext());
+        user__type = receive.getTokenAndLoginPersonType(2);
+
+        if (user__type.equals("Teacher") || user__type.equals("Parent") ) {
+            try {
+
+                boolean isNetwork = Utility.isNetworkAvailable(getApplicationContext());
+                if (isNetwork) {
+                    readAndStoreAds();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (XmlPullParserException e) {
+                e.printStackTrace();
             }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
+
         }
-
-
     }
 
     private void readAndStoreAds() throws IOException, XmlPullParserException {
@@ -141,5 +148,12 @@ public class AdChangeCheckerService extends IntentService {
             alarmManager.cancel(pi);
             pi.cancel();
         }
+    }
+
+    public static void CancelAlarm(Context context) {
+        Intent intent = new Intent(context, AdChangeCheckerService.class);
+        PendingIntent sender = PendingIntent.getBroadcast(context, 0, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(sender);
     }
 }

@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.CALL_PHONE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.VIBRATE"/>
+    <uses-permission android:name="android.permission.VIBRATE" />
 
     <application
         android:allowBackup="true"
@@ -14,7 +14,6 @@
         android:roundIcon="@drawable/school"
         android:supportsRtl="true"
         android:theme="@style/AppMaterialTheme">
-
         <activity android:name=".LoginChecker">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,7 +21,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait" />
@@ -57,19 +55,24 @@
         <service
             android:name="service.PollService"
             android:exported="false" />
-
         <service
             android:name="service.AdChangeCheckerService"
+            android:exported="false" />
+        <service
+            android:name="service.MessagesService"
             android:exported="false" />
         <service
             android:name="service.TeacherAttendanceListService"
             android:exported="false" />
 
-        <activity android:name=".ShowMessage">
+        <activity android:name=".ShowNoticeMessage">
             android:screenOrientation="portrait"
         </activity>
         <activity android:name=".TeacherAttendence" />
-        <activity android:name=".ExamMarkSheetGPA"></activity>
+        <activity android:name=".ExamMarkSheetGPA" />
+        <activity android:name=".MessagesList" />
+        <activity android:name=".MessgesHistory" />
+        <activity android:name=".ComposeMessage"></activity>
     </application>
 
 </manifest>

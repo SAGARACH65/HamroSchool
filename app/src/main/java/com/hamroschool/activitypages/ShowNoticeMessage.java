@@ -6,7 +6,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.TextView;
 
-public class ShowMessage extends AppCompatActivity {
+public class ShowNoticeMessage extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

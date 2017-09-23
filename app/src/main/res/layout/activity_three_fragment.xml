@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.hamroschool.activitypages.Fragments.CommunicationFragment">
+    >
 
     <LinearLayout
         android:id="@+id/linear3"
@@ -37,6 +37,7 @@
     </LinearLayout>
 
     <LinearLayout
+        android:id="@+id/linear4"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/linear3"
@@ -66,11 +67,40 @@
             android:textColor="#000000"
             android:textSize="13sp" />
     </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/linear4"
+        android:layout_marginEnd="25dp"
+        android:layout_marginStart="25dp"
+
+        android:layout_marginTop="20dp">
+
+        <ImageButton
+            android:id="@+id/imageButtonMessage"
+            android:layout_width="70dp"
+            android:layout_height="70dp"
+            android:background="#dddddd"
+            android:scaleType="fitXY"
+            android:src="@drawable/message" />
+
+        <TextView
+            android:id="@+id/ButtonMessgae"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:background="#dddddd"
+            android:gravity="center"
+            android:text="@string/message"
+            android:textAlignment="center"
+            android:textColor="#000000"
+            android:textSize="13sp" />
+    </LinearLayout>
+
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="match_parent"
         android:layout_height="49dp"
-        android:layout_alignParentBottom="true"
-      />
+        android:layout_alignParentBottom="true" />
 
 </RelativeLayout>

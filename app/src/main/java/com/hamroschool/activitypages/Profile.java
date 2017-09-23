@@ -34,6 +34,7 @@ public class Profile extends AppCompatActivity {
     private static final String PREF_NAME = "LOGIN_PREF";
     private static final String PREF_NAME_ADS_SYNCED = "HAS_ADS_SYNCED";
     private static final String PREF_NAME_HAS_INFO_SYNCED_FIRST_TIME = "HAS_INFO_SSYNCED_FIRST_TIME";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +53,7 @@ public class Profile extends AppCompatActivity {
         SharedPreferences settings1 = getSharedPreferences(PREF_NAME_HAS_INFO_SYNCED_FIRST_TIME, 0);
 
         boolean hasSynced = settings1.getBoolean("hasInfoSynced", false);
-        if(hasSynced) {
+        if (hasSynced) {
             showData();
         }
 
@@ -170,31 +171,31 @@ public class Profile extends AppCompatActivity {
             int which_ad = select.select_which_ad(no_of_entries);
             //getting bitmap and redirect link of that ad
             ShowAds adsData = new ShowAds(getApplicationContext());
-            try{
-            Bitmap image_bitmap_data = adsData.getBitmap(which_ad);
-            final String redirect_link = adsData.getRedirectLink(which_ad);
+            try {
+                Bitmap image_bitmap_data = adsData.getBitmap(which_ad);
+                final String redirect_link = adsData.getRedirectLink(which_ad);
 
-            //show the ad in imageview
-            ImageView img = (ImageView) findViewById(R.id.imageView);
-            img.setScaleType(ImageView.ScaleType.FIT_XY);
-            img.setImageBitmap(image_bitmap_data);
+                //show the ad in imageview
+                ImageView img = (ImageView) findViewById(R.id.imageView);
+                img.setScaleType(ImageView.ScaleType.FIT_XY);
+                img.setImageBitmap(image_bitmap_data);
 
-            //redirect link for the ad
-            img.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    Intent intent = new Intent();
-                    intent.setAction(Intent.ACTION_VIEW);
-                    intent.addCategory(Intent.CATEGORY_BROWSABLE);
-                    intent.setData(Uri.parse(redirect_link));
-                    startActivity(intent);
-                }
-            });
-        }catch (NullPointerException e){
-            SharedPreferences has_ads_synced1 = getSharedPreferences(PREF_NAME_ADS_SYNCED, 0);
-            SharedPreferences.Editor editor2 = has_ads_synced1.edit();
-            editor2.putBoolean("hasSynced", false);
-            editor2.apply();
-        }
+                //redirect link for the ad
+                img.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_VIEW);
+                        intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                        intent.setData(Uri.parse(redirect_link));
+                        startActivity(intent);
+                    }
+                });
+            } catch (NullPointerException e) {
+                SharedPreferences has_ads_synced1 = getSharedPreferences(PREF_NAME_ADS_SYNCED, 0);
+                SharedPreferences.Editor editor2 = has_ads_synced1.edit();
+                editor2.putBoolean("hasSynced", false);
+                editor2.apply();
+            }
 
         }
     }

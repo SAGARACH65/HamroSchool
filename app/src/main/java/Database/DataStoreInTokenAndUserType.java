@@ -54,4 +54,19 @@ public class DataStoreInTokenAndUserType {
         }
     }
 
+    public void storeXMLMSG(String received, boolean delete_table, boolean notclear) {
+        SQLiteDatabase db = open();
+        if (delete_table) {
+            db.delete("xml_data_msg", null, null);
+            db.execSQL("DELETE FROM SQLITE_SEQUENCE WHERE NAME = '" + "xml_data_msg" + "'");
+
+        }
+        if (!notclear) {
+            ContentValues user_data = new ContentValues();
+            user_data.put("XML_MSG", received);
+
+            db.insert("xml_data_msg", null, user_data);
+        }
+    }
+
 }

@@ -27,16 +27,14 @@ public class LoginChecker extends AppCompatActivity {
         boolean hasLoggedIn = settings.getBoolean("hasLoggedIn", false);
 
 
-
         if (hasLoggedIn) {
             //if user is currently logged in;
             //Go directly to main activity.
-            DBReceiveTokenAndUserType receive=new DBReceiveTokenAndUserType(getApplicationContext());
-           String user_type= receive.getTokenAndLoginPersonType(2);
+            DBReceiveTokenAndUserType receive = new DBReceiveTokenAndUserType(getApplicationContext());
+            String user_type = receive.getTokenAndLoginPersonType(2);
             if (user_type.equals("Parent")) {
                 intent = new Intent(this, MainActivity.class);
-            }
-            else{
+            } else {
                 intent = new Intent(this, TeacherAttendence.class);
             }
 

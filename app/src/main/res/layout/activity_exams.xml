@@ -58,20 +58,22 @@
 
 
     </TableRow>
+
     <ScrollView
+        android:id="@+id/scroll_view"
         android:layout_width="match_parent"
-        android:layout_below="@+id/info_bar"
         android:layout_height="489dp"
-        android:id="@+id/scroll_view">
-    <TableLayout
-        android:id="@+id/main_table"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_below="@+id/info_bar">
 
-        android:layout_marginEnd="6dp"
-        android:layout_marginStart="6dp">
+        <TableLayout
+            android:id="@+id/main_table"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
 
-    </TableLayout>
+            android:layout_marginEnd="6dp"
+            android:layout_marginStart="6dp">
+
+        </TableLayout>
     </ScrollView>
 
     <ImageView

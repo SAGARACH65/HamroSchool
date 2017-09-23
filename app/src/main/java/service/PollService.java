@@ -52,9 +52,9 @@ public class PollService extends IntentService {
 
     private boolean donotcontinue = false;
     private static final String PREF_NAME = "LOGIN_PREF";
-
+    private String user__type;
     private String urll = "http://www.hamroschool.net/myschoolapp/loginapi/getstudentdetails.php?usertoken=";
-    private static final int POLL_INTERVAL = 1000 * 60;
+    private static final int POLL_INTERVAL = 1000 * 60 ;
 
     public PollService() {
         // Used to name the worker thread, important only for debugging.
@@ -70,28 +70,33 @@ public class PollService extends IntentService {
 
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
-        boolean is_Network_Available = Utility.isNetworkAvailable(getApplicationContext());
-        if (is_Network_Available) {
-            try {
-                try {
+        DBReceiveTokenAndUserType receive=new DBReceiveTokenAndUserType(getApplicationContext());
+        user__type=receive.getTokenAndLoginPersonType(2);
 
-                    DBReceiveTokenAndUserType rec = new DBReceiveTokenAndUserType(getApplicationContext());
-                    String token = rec.getTokenAndLoginPersonType(1);
-                    urll = urll + token;
-                    readFromWeb();
-                } catch (XmlPullParserException e) {
+        if(user__type.equals("Parent")) {
+            boolean is_Network_Available = Utility.isNetworkAvailable(getApplicationContext());
+            if (is_Network_Available) {
+                try {
+                    try {
+
+                        DBReceiveTokenAndUserType rec = new DBReceiveTokenAndUserType(getApplicationContext());
+                        String token = rec.getTokenAndLoginPersonType(1);
+                        urll = urll + token;
+                        readFromWeb();
+                    } catch (XmlPullParserException e) {
+                        e.printStackTrace();
+                    }
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
 
+            }
         }
     }
 
     private void readFromWeb() throws IOException, XmlPullParserException {
 
-        String returned = null;
+        String returned ;
         String parsedxml;
         URL url = new URL(urll);
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
@@ -134,7 +139,7 @@ public class PollService extends IntentService {
 
         while (eventType != XmlPullParser.END_DOCUMENT) {
             count++;
-            if (count > 20) {
+            if (count > 25) {
                 break;
             }
             if (eventType == XmlPullParser.TEXT) {
@@ -271,7 +276,6 @@ public class PollService extends IntentService {
                     break;
             }
         }
-
     }
 
     private String readStream(InputStream in) throws IOException {
@@ -298,7 +302,13 @@ public class PollService extends IntentService {
             pi.cancel();
         }
     }
-
+    public static void CancelAlarm(Context context)
+    {
+        Intent intent = new Intent(context, PollService.class);
+        PendingIntent sender = PendingIntent.getBroadcast(context, 0, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(sender);
+    }
     public static boolean isServiceAlarmOn(Context context) {
         //used to check if pending intent exists or not
         Intent i = new Intent(context, PollService.class);

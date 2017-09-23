@@ -37,6 +37,7 @@ public class TeacherAttendanceListService extends IntentService {
     private static final String TAG = "TeacherAttendanceListService";
     private String urll = "http://www.hamroschool.net/myschoolapp/loginapi/teacherservice.php?usertoken=";
     private static final int POLL_INTERVAL = 1000 * 60;
+    private String user__type;
 
     public TeacherAttendanceListService() {
         // Used to name the worker thread, important only for debugging.
@@ -53,25 +54,30 @@ public class TeacherAttendanceListService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
 
+        DBReceiveTokenAndUserType receive = new DBReceiveTokenAndUserType(getApplicationContext());
+        user__type = receive.getTokenAndLoginPersonType(2);
 
-        boolean is_Network_Available = Utility.isNetworkAvailable(getApplicationContext());
-        if (is_Network_Available) {
-            try {
+        if (user__type.equals("Teacher")) {
+            boolean is_Network_Available = Utility.isNetworkAvailable(getApplicationContext());
+            if (is_Network_Available) {
                 try {
+                    try {
 
-                    DBReceiveTokenAndUserType rec = new DBReceiveTokenAndUserType(getApplicationContext());
-                    String token = rec.getTokenAndLoginPersonType(1);
-                    urll = urll + token;
-                    readFromWeb();
-                } catch (XmlPullParserException e) {
+                        DBReceiveTokenAndUserType rec = new DBReceiveTokenAndUserType(getApplicationContext());
+                        String token = rec.getTokenAndLoginPersonType(1);
+                        urll = urll + token;
+                        readFromWeb();
+                    } catch (XmlPullParserException e) {
+                        e.printStackTrace();
+                    }
+                } catch (IOException e) {
                     e.printStackTrace();
                 }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
 
+            }
         }
     }
+
     private void checkIfTOqkenChanged(InputStream in) throws XmlPullParserException {
         XmlPullParser parser = Xml.newPullParser();
         parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
@@ -82,7 +88,7 @@ public class TeacherAttendanceListService extends IntentService {
 
         while (eventType != XmlPullParser.END_DOCUMENT) {
             count++;
-            if (count > 20) {
+            if (count > 22) {
                 break;
             }
             if (eventType == XmlPullParser.TEXT) {
@@ -103,6 +109,7 @@ public class TeacherAttendanceListService extends IntentService {
         }
 
     }
+
     private void readFromWeb() throws IOException, XmlPullParserException {
         String returned = null;
         URL url = new URL(urll);
@@ -178,6 +185,13 @@ public class TeacherAttendanceListService extends IntentService {
             alarmManager.cancel(pi);
             pi.cancel();
         }
+    }
+
+    public static void CancelAlarm(Context context) {
+        Intent intent = new Intent(context, TeacherAttendanceListService.class);
+        PendingIntent sender = PendingIntent.getBroadcast(context, 0, intent, 0);
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+        alarmManager.cancel(sender);
     }
 
 }

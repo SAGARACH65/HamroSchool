@@ -70,5 +70,21 @@ public class DBReceiveTokenAndUserType {
         cursor.close();
         return send;
     }
+    public String receiveXMLMSG() {
+        SQLiteDatabase db = open();
+        Cursor cursor = db.query("xml_data_msg",
+                new String[]{"_id", "XML_MSG",},
+                null,
+                null, null, null, null
+        );
+        if (cursor.moveToFirst()) {
+            do {
+                send = cursor.getString(1);
+                cursor.moveToNext();
 
+            } while (!cursor.isAfterLast());
+        }
+        cursor.close();
+        return send;
+    }
 }

@@ -48,10 +48,11 @@ public class HamroSchoolXmlParser {
             in.close();
         }
     }
-//this is called by the service directly
+
+    //this is called by the service directly
     private void readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
 
-        String name = parser.getName();
+        String name ;
 
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -337,9 +338,17 @@ public class HamroSchoolXmlParser {
         parser.next();
 
         photo_link = readText(parser);
-        ConvertToByteArray cvb = new ConvertToByteArray();
-        byte[] byte_array = cvb.getLogoImage(photo_link);
 
+
+        byte[] byte_array;
+        ConvertToByteArray cvb = new ConvertToByteArray();
+        if (!photo_link.equals("")) {
+
+            byte_array = cvb.getLogoImage(photo_link);
+        } else {
+            photo_link = "https://dabble.co/assets/fallback/default_user_photo-5cf83e232ebc4a1bab67fb6bf24fa1d1da9b603af2a2bc8e98c6d4c2d015d107.png";
+            byte_array = cvb.getLogoImage(photo_link);
+        }
         parser.next();
 
         DataStoreInDBProfile dsp = new DataStoreInDBProfile(mContext);
@@ -357,7 +366,7 @@ public class HamroSchoolXmlParser {
         String tagName = parser.getName();
         attendance_list = readText(parser);
         parser.next();
-        DataStoreInDBFAttendanceRecord dsp=new DataStoreInDBFAttendanceRecord(mContext);
+        DataStoreInDBFAttendanceRecord dsp = new DataStoreInDBFAttendanceRecord(mContext);
         dsp.storeAttendanceRecord(attendance_list, true, false);
 
         parser.require(XmlPullParser.END_TAG, ns, "attendancerecord");

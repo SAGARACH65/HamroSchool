@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.hamroschool.activitypages.ConnectToTeachers;
+import com.hamroschool.activitypages.MessagesList;
 import com.hamroschool.activitypages.Notices;
 import com.hamroschool.activitypages.R;
 
@@ -52,7 +53,6 @@ public class CommunicationFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), Notices.class);
                 startActivity(intent);
 
-                // do something
             }
         });
 
@@ -63,7 +63,6 @@ public class CommunicationFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), Notices.class);
                 startActivity(intent);
 
-                // do something
             }
         });
 
@@ -75,7 +74,6 @@ public class CommunicationFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), ConnectToTeachers.class);
                 startActivity(intent);
 
-                // do something
             }
         });
 
@@ -87,9 +85,32 @@ public class CommunicationFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), ConnectToTeachers.class);
                 startActivity(intent);
 
-                // do something
             }
         });
+
+        ImageButton img_btn2 = (ImageButton) view.findViewById(R.id.imageButtonMessage);
+        img_btn2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MessagesList.class);
+                startActivity(intent);
+
+            }
+        });
+        //TODO remove these invisiblility
+
+
+
+        TextView button2 = (TextView) view.findViewById(R.id.ButtonMessgae);
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getActivity(), MessagesList.class);
+                startActivity(intent);
+
+            }
+        });
+
 
         Bitmap image_bitmap_data;
         SharedPreferences settings = getContext().getSharedPreferences(PREF_NAME_ADS_SYNCED, 0);
@@ -103,35 +124,35 @@ public class CommunicationFragment extends Fragment {
             int which_ad = select.select_which_ad(no_of_entries);
             //getting bitmap and redirect link of that ad
             ShowAds adsData = new ShowAds(getContext());
-         //this is  for the rare case that can occour when while converting process of image network fails
+            //this is  for the rare case that can occour when while converting process of image network fails
 
-             try {
-              image_bitmap_data = adsData.getBitmap(which_ad);
+            try {
+                image_bitmap_data = adsData.getBitmap(which_ad);
 
-            final String redirect_link = adsData.getRedirectLink(which_ad);
+                final String redirect_link = adsData.getRedirectLink(which_ad);
 
-            //show the ad in imageview
-            ImageView img = (ImageView) view.findViewById(R.id.imageView);
-            img.setScaleType(ImageView.ScaleType.FIT_XY);
-            img.setImageBitmap(image_bitmap_data);
+                //show the ad in imageview
+                ImageView img = (ImageView) view.findViewById(R.id.imageView);
+                img.setScaleType(ImageView.ScaleType.FIT_XY);
+                img.setImageBitmap(image_bitmap_data);
 
-            //redirect link for the ad
-            img.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    Intent intent = new Intent();
-                    intent.setAction(Intent.ACTION_VIEW);
-                    intent.addCategory(Intent.CATEGORY_BROWSABLE);
-                    intent.setData(Uri.parse(redirect_link));
-                    startActivity(intent);
-                }
-            });
+                //redirect link for the ad
+                img.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_VIEW);
+                        intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                        intent.setData(Uri.parse(redirect_link));
+                        startActivity(intent);
+                    }
+                });
 
-           }catch (NullPointerException e){
-               SharedPreferences has_ads_synced1 = getContext().getSharedPreferences(PREF_NAME_ADS_SYNCED, 0);
-               SharedPreferences.Editor editor2 = has_ads_synced1.edit();
-               editor2.putBoolean("hasSynced", false);
-               editor2.apply();
-        }
+            } catch (NullPointerException e) {
+                SharedPreferences has_ads_synced1 = getContext().getSharedPreferences(PREF_NAME_ADS_SYNCED, 0);
+                SharedPreferences.Editor editor2 = has_ads_synced1.edit();
+                editor2.putBoolean("hasSynced", false);
+                editor2.apply();
+            }
 
 
         }

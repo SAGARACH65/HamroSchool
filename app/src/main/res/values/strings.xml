@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Hamro School</string>
+    <string name="app_name">BCL School</string>
 
     <string name="Exams">EXAMS</string>
     <string name="profile">PROFILE</string>
@@ -14,8 +14,8 @@
     <string name="logout">Logout</string>
     <string name="authenticating">Authenticating Please Wait....</string>
     <string name="profile_school">Profile In School Record</string>
-<string name="save">Save</string>
-
+    <string name="save">Save</string>
+    <string name="message">MESSAGE TEACHERS</string>
     <!--For Profile-->
     <string name="Student_Name">Student\'s Name:</string>
     <string name="dob">Date of Birth:</string>
@@ -84,4 +84,16 @@
 
     <string name="cgpa">CGPA:</string>
     <string name="gpa">GPA</string>
+
+
+
+    <string name="message_history">Message History</string>
+    <string name="messgae_list">Message List</string>
+    <string name="compose_message">Compose Message</string>
+    
+    
+    <string name="to">To:</string>
+    <string name="c_message">Message:</string>
+    <string name="send">SEND</string>
+    <string name="hint">Enter Your Message Here</string>
 </resources>

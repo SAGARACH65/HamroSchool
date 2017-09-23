@@ -17,16 +17,12 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
-
 import Ads.GetTotalEntriesInDB;
 import Ads.SelectWhichAdTOShow;
 import Ads.ShowAds;
-import Database.DBReceivedCachedImages;
 import Database.DBReceiverForNotices;
 import service.AdChangeCheckerService;
 import service.PollService;
-import utility.Utility;
 
 public class Notices extends AppCompatActivity {
     private Context mContext;
@@ -130,31 +126,31 @@ public class Notices extends AppCompatActivity {
             int which_ad = select.select_which_ad(no_of_entries);
             //getting bitmap and redirect link of that ad
             ShowAds adsData = new ShowAds(getApplicationContext());
-           try{
-            Bitmap image_bitmap_data = adsData.getBitmap(which_ad);
-            final String redirect_link = adsData.getRedirectLink(which_ad);
+            try {
+                Bitmap image_bitmap_data = adsData.getBitmap(which_ad);
+                final String redirect_link = adsData.getRedirectLink(which_ad);
 
-            //show the ad in imageview
-            ImageView img = (ImageView) findViewById(R.id.imageView);
-            img.setScaleType(ImageView.ScaleType.FIT_XY);
-            img.setImageBitmap(image_bitmap_data);
+                //show the ad in imageview
+                ImageView img = (ImageView) findViewById(R.id.imageView);
+                img.setScaleType(ImageView.ScaleType.FIT_XY);
+                img.setImageBitmap(image_bitmap_data);
 
-            //redirect link for the ad
-            img.setOnClickListener(new View.OnClickListener() {
-                public void onClick(View v) {
-                    Intent intent = new Intent();
-                    intent.setAction(Intent.ACTION_VIEW);
-                    intent.addCategory(Intent.CATEGORY_BROWSABLE);
-                    intent.setData(Uri.parse(redirect_link));
-                    startActivity(intent);
-                }
-            });
-        }catch (NullPointerException e){
-            SharedPreferences has_ads_synced1 = getSharedPreferences(PREF_NAME_ADS_SYNCED, 0);
-            SharedPreferences.Editor editor2 = has_ads_synced1.edit();
-            editor2.putBoolean("hasSynced", false);
-            editor2.apply();
-        }
+                //redirect link for the ad
+                img.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        Intent intent = new Intent();
+                        intent.setAction(Intent.ACTION_VIEW);
+                        intent.addCategory(Intent.CATEGORY_BROWSABLE);
+                        intent.setData(Uri.parse(redirect_link));
+                        startActivity(intent);
+                    }
+                });
+            } catch (NullPointerException e) {
+                SharedPreferences has_ads_synced1 = getSharedPreferences(PREF_NAME_ADS_SYNCED, 0);
+                SharedPreferences.Editor editor2 = has_ads_synced1.edit();
+                editor2.putBoolean("hasSynced", false);
+                editor2.apply();
+            }
         }
     }
 
@@ -181,7 +177,7 @@ public class Notices extends AppCompatActivity {
             DBReceiverForNotices received = new DBReceiverForNotices(getApplicationContext());
             String message = received.getData(m_clicked_positon + 1, 2);
             String msg_title = received.getData(m_clicked_positon + 1, 1);
-            Intent intent = new Intent(getApplicationContext(), ShowMessage.class);
+            Intent intent = new Intent(getApplicationContext(), ShowNoticeMessage.class);
             Bundle extras = new Bundle();
             extras.putString("messgae", message);
             extras.putString("notice_title", msg_title);

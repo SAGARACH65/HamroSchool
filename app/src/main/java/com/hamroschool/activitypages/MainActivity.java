@@ -33,7 +33,7 @@ import org.xmlpull.v1.XmlPullParserException;
 import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -42,7 +42,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
+
 
 import Database.DBReceiverForProfile;
 import Database.DBReceiveTokenAndUserType;
@@ -51,9 +51,12 @@ import Fragments.CommunicationFragment;
 import Fragments.ExamFragment;
 import Fragments.StudentInfoFragment;
 import service.AdChangeCheckerService;
+import service.MessagesService;
 import service.PollService;
+import service.TeacherAttendanceListService;
 import xmlparser.HamroSchoolXmlParser;
 import xmlparser.XMLParserForAds;
+import xmlparser.XMLParserForMessages;
 
 public class MainActivity extends AppCompatActivity {
     String urll = "http://www.hamroschool.net/myschoolapp/loginapi/getstudentdetails.php?usertoken=";
@@ -90,12 +93,13 @@ public class MainActivity extends AppCompatActivity {
             connect_again.execute("sagar");
 
 
+            MainActivity.ConnectToServerForMessages connect_msg = new MainActivity.ConnectToServerForMessages();
+            connect_msg.execute("sagar");
 
             SharedPreferences sharedPreferences = getSharedPreferences(PREF_NAME_FIRST_LOGIN, 0);
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putBoolean("isfirst", false);
             editor.apply();
-
 
 
         }
@@ -130,9 +134,115 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private class ConnectToServerForMessages extends AsyncTask<String, String, String> {
+
+
+        @Override
+        protected void onPreExecute() {
+            //has access to main thread(i.e UI thread)
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            //all code here runs in background thread
+            DBReceiveTokenAndUserType rec = new DBReceiveTokenAndUserType(getApplicationContext());
+            //1 is for getting token 2 is for getting user type
+            String token = rec.getTokenAndLoginPersonType(1);
+           String urlll="http://www.hamroschool.net/myschoolapp/loginapi/messageservice.php?usertoken=";
+            urlll = urlll + token;
+            URL url = null;
+            try {
+                url = new URL(urlll);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            }
+            HttpURLConnection urlConnection = null;
+            try {
+                urlConnection = (HttpURLConnection) url.openConnection();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            try {
+                if (urlConnection.getResponseCode() == 200) {
+                    urlConnection.setConnectTimeout(5 * 1000);
+
+                    try {
+
+                        int statusCode = urlConnection.getResponseCode();
+
+                        InputStream in;
+
+                        if (statusCode >= 200 && statusCode < 400) {
+                            // Create an InputStream in order to extract the response object
+                            in = new BufferedInputStream(urlConnection.getInputStream());
+                        } else {
+
+                            in = new BufferedInputStream(urlConnection.getErrorStream());
+                        }
+                        result = readStream(in);
+
+
+                    } finally {
+
+                        urlConnection.disconnect();
+                    }
+                } else {
+                    urlConnection.disconnect();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+
+            XMLParserForMessages hp = new XMLParserForMessages(getApplicationContext());
+
+            DataStoreInTokenAndUserType db_store = new DataStoreInTokenAndUserType(getApplicationContext());
+            db_store.storeXMLMSG(result, true, false);
+
+            try {
+                InputStream stream = new ByteArrayInputStream(result.getBytes());
+                hp.parse(stream);
+
+            } catch (XmlPullParserException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            return "sa";
+        }
+
+        private String readStream(InputStream in) throws IOException {
+            BufferedReader br = new BufferedReader(new InputStreamReader(in));
+            StringBuilder result = new StringBuilder();
+            String line;
+            while ((line = br.readLine()) != null) {
+                result.append(line);
+            }
+            return (result.toString());
+        }
+
+
+        @Override
+        protected void onPostExecute(String s) {
+
+        }
+
+    }
+
+
+
+
+
+
+
+
     private void startServices() {
         PollService.setServiceAlarm(getApplicationContext(), true);
         AdChangeCheckerService.setServiceAlarm(getApplicationContext(), true);
+        MessagesService.setServiceAlarm(getApplicationContext(), true);
+        stopService(new Intent(getApplicationContext(), TeacherAttendanceListService.class));
     }
 
 
@@ -427,6 +537,8 @@ public class MainActivity extends AppCompatActivity {
                                 //stopping the previous services
                                 stopService(new Intent(getApplicationContext(), AdChangeCheckerService.class));
                                 stopService(new Intent(getApplicationContext(), PollService.class));
+                                stopService(new Intent(getApplicationContext(), MessagesService.class));
+
                                 Intent intent = new Intent(MainActivity.this, LoginChecker.class);
                                 startActivity(intent);
                                 finish();

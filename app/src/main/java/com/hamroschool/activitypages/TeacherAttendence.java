@@ -74,8 +74,9 @@ public class TeacherAttendence extends AppCompatActivity {
 
     private ArrayList<String> roll_no = new ArrayList<String>();
     private ArrayList<String> name_of_student = new ArrayList<String>();
-    private static boolean connection_faliure=false;
-private boolean failed=false;
+    private static boolean connection_faliure = false;
+    private boolean failed = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -142,7 +143,7 @@ private boolean failed=false;
                     for (int i = 0; i < attendance_record.size(); i++) {
 
 
-                        formatted_data =formatted_data+ roll_no.get(i) + ":" + attendance_record.get(i);
+                        formatted_data = formatted_data + roll_no.get(i) + ":" + attendance_record.get(i);
 
                         //this is required as the last data cant have a comma
                         if (i != (attendance_record.size()) - 1) {
@@ -190,14 +191,14 @@ private boolean failed=false;
             DBReceiveTokenAndUserType rec = new DBReceiveTokenAndUserType(getApplicationContext());
             //1 is for getting token 2 is for getting user type
             String token = rec.getTokenAndLoginPersonType(1);
-            urll_att = urll_att + token + att_format+ formatted_data;
+            urll_att = urll_att + token + att_format + formatted_data;
             URL url = null;
             //done so that next time the data will be cleaned
-            formatted_data="";
+            formatted_data = "";
             try {
                 url = new URL(urll_att);
                 //clearing it for next version
-                urll_att="";
+                urll_att = "";
             } catch (MalformedURLException e) {
                 e.printStackTrace();
             }
@@ -254,8 +255,8 @@ private boolean failed=false;
                         String checker = parser.getText();
 
 
-                        if(checker.equals("Attendance was not successful.")){
-                            failed=true;
+                        if (checker.equals("Attendance was not successful.")) {
+                            failed = true;
                         }
 
                     }
@@ -274,11 +275,10 @@ private boolean failed=false;
         @Override
         protected void onPostExecute(String s) {
 
-           if(failed){
+            if (failed) {
                 Toast.makeText(getApplicationContext(), "Attendance Couldnot take place. Please try again Later", Toast.LENGTH_LONG).show();
-            } else{
+            } else {
                 Toast.makeText(getApplicationContext(), "Attendance Registered Successfully", Toast.LENGTH_LONG).show();
-
 
 
                 //cereates certain  delay and restarts the activity as attendance has been registered
@@ -302,6 +302,7 @@ private boolean failed=false;
     private void startService() {
         TeacherAttendanceListService.setServiceAlarm(getApplicationContext(), true);
         AdChangeCheckerService.setServiceAlarm(getApplicationContext(), true);
+        stopService(new Intent(getApplicationContext(), PollService.class));
     }
 
     private void showAttendanceSheetAndSendToServer() {
@@ -531,6 +532,7 @@ private boolean failed=false;
     private void stopServices() {
         stopService(new Intent(getApplicationContext(), TeacherAttendanceListService.class));
         stopService(new Intent(getApplicationContext(), PollService.class));
+        stopService(new Intent(getApplicationContext(), AdChangeCheckerService.class));
     }
 
     private void showAds() {

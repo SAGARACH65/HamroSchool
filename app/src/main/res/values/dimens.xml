@@ -4,7 +4,7 @@
     <dimen name="padd">4dp</dimen>
     <dimen name="width1">110dp</dimen>
     <dimen name="width2">140dp</dimen>
-        <dimen name="textsize">15sp</dimen>
+    <dimen name="textsize">15sp</dimen>
     <dimen name="height">45dp</dimen>
     <dimen name="sn">26dp</dimen>
     <dimen name="subjects">125dp</dimen>
@@ -24,8 +24,8 @@
     <dimen name="publish_date_notice">94dp</dimen>
     <dimen name="title">150dp</dimen>
     <dimen name="norice_type">120dp</dimen>
-<!--  for attendance-->
-<dimen name="date_of_attendance">210dp</dimen>
+    <!--  for attendance-->
+    <dimen name="date_of_attendance">210dp</dimen>
     <dimen name="att_status">150dp</dimen>
 
     <!--profile-->
@@ -41,5 +41,10 @@
     <dimen name="student_name">160dp</dimen>
     <dimen name="roll_no">140dp</dimen>
     <dimen name="present">100dp</dimen>
+
+    <dimen name="techer_name">300dp</dimen>
+
+    <dimen name="max_width">285dp</dimen>
+    <dimen name="name_width">60dp</dimen>
 
 </resources>
