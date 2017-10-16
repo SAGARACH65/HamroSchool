@@ -5,20 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.hamroschool.activitypages.ShowNoticeMessage">
+
     <include
         android:id="@+id/toolbar"
         layout="@layout/tool_bar" />
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="235dp"
-        android:layout_height="150dp"
-android:layout_below="@+id/toolbar"
-        android:gravity="center"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/toolbar"
+        android:gravity="center|top"
+        android:textAlignment="center"
         android:textColor="@color/black"
         android:textSize="18sp"
-        android:textAlignment="center"
         tools:layout_editor_absoluteX="129dp"
-        tools:layout_editor_absoluteY="100dp"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentStart="true" />
+        tools:layout_editor_absoluteY="100dp" />
 </RelativeLayout>

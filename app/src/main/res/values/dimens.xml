@@ -44,7 +44,7 @@
 
     <dimen name="techer_name">300dp</dimen>
 
-    <dimen name="max_width">285dp</dimen>
-    <dimen name="name_width">60dp</dimen>
+    <dimen name="max_width">265dp</dimen>
+    <dimen name="name_width">80dp</dimen>
 
 </resources>

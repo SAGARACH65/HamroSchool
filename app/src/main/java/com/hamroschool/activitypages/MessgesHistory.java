@@ -1,8 +1,10 @@
 package com.hamroschool.activitypages;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -10,6 +12,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ScrollView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -52,19 +55,50 @@ public class MessgesHistory extends AppCompatActivity {
 
 
                 intent.putExtras(extras);
-                startActivity(intent);
-                finish();
+                startActivityForResult(intent, 1);
+
             }
         });
+        try {
+            showData();
+        } catch (ArrayIndexOutOfBoundsException e) {
 
-        showData();
-
+        }
     }
 
-    private void showData() {
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+
+                Intent returnIntent = new Intent();
+                setResult(Activity.RESULT_OK, returnIntent);
+                finish();
+
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+
+            }
+
+
+        }
+    }//onActivityResult
+
+    private void showData() throws ArrayIndexOutOfBoundsException {
 
         TableLayout tabLayout = (TableLayout) findViewById(R.id.main_table);
 
+
+        //this is sothat scroll view will start from the bottom
+        final ScrollView scroll = (ScrollView) findViewById(R.id.scroll_view);
+
+        scroll.post(new Runnable() {
+            @Override
+            public void run() {
+                scroll.fullScroll(View.FOCUS_DOWN);
+            }
+        });
 //1 is for teacher 2 is for parent
         ArrayList<String> parent_or_teacher = new ArrayList<String>();
         ArrayList<String> message_sent = new ArrayList<String>();
@@ -75,7 +109,11 @@ public class MessgesHistory extends AppCompatActivity {
 
             String[] data = split_data[i].split("\\*");
             parent_or_teacher.add(data[0]);
-            message_sent.add(data[1]);
+            if (data[1] != null) {
+                message_sent.add(data[1]);
+            } else {
+                message_sent.add(" ");
+            }
         }
 
         //now show the data obtained

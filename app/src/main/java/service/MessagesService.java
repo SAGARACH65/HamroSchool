@@ -44,7 +44,7 @@ import xmlparser.XMLParserForMessages;
 
 public class MessagesService extends IntentService {
     private String urll = "http://www.hamroschool.net/myschoolapp/loginapi/messageservice.php?usertoken=";
-    private static final int POLL_INTERVAL = 1000 * 60;
+    private static final int POLL_INTERVAL = 1000 * 60 * 3;
     private static final String TAG = "MessagesService";
     private static final String PREF_NAME = "LOGIN_PREF";
     private String user__type;
@@ -180,8 +180,6 @@ public class MessagesService extends IntentService {
 
 
     }
-
-
 
 
     private void checkIfTOqkenChanged(InputStream in) throws XmlPullParserException {

@@ -286,11 +286,11 @@ public class TeacherAttendence extends AppCompatActivity {
                 handler.postDelayed(new Runnable() {
                     @Override
                     public void run() {
-                        //this piece of code is run after 3 seconds i.e. 3000ms
+                        //this piece of code is run after 1 seconds i.e. 1000ms
                         finish();
                         startActivity(getIntent());
                     }
-                }, 2000);
+                }, 1000);
 
 
             }

@@ -27,7 +27,7 @@ public class DBStoreForMessages {
         SQLiteDatabase db = open();
         if (delete_table) {
             db.delete("chat", null, null);
-            db.execSQL("DELETE FROM SQLITE_SEQUENCE WHERE NAME = '" + "notices" + "'");
+            db.execSQL("DELETE FROM SQLITE_SEQUENCE WHERE NAME = '" + "chat" + "'");
 
         }
         if (!notclear) {

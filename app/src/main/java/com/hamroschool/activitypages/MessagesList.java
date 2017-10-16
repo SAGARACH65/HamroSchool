@@ -1,5 +1,6 @@
 package com.hamroschool.activitypages;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -7,6 +8,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.net.Uri;
+import android.os.Handler;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,6 +38,8 @@ public class MessagesList extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_messages_list);
 
@@ -45,6 +49,8 @@ public class MessagesList extends AppCompatActivity {
         TextView title_bar = (TextView) findViewById(R.id.mainToolBar);
         title_bar.setText(R.string.messgae_list);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
 
 
         FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab);
@@ -58,8 +64,7 @@ public class MessagesList extends AppCompatActivity {
 
 
                 intent.putExtras(extras);
-                startActivity(intent);
-                finish();
+                startActivityForResult(intent,1);
             }
         });
 
@@ -70,6 +75,34 @@ public class MessagesList extends AppCompatActivity {
 
 
     }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        if (requestCode == 1) {
+            if (resultCode == Activity.RESULT_OK) {
+
+                //cereates certain  delay and restarts the activity as message has been registered
+                final Handler handler = new Handler();
+                handler.postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        //this piece of code is run after  5ms
+                        finish();
+
+                        startActivity(getIntent());
+                    }
+                }, 5);
+
+
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+
+            }
+
+
+        }
+    }//onActivityResult
 
     private void showMessageList() {
         TableLayout tabLayout = (TableLayout) findViewById(R.id.main_table);
@@ -139,7 +172,7 @@ public class MessagesList extends AppCompatActivity {
             extras.putString("message_list", msg_list);
 
             intent.putExtras(extras);
-            startActivity(intent);
+            startActivityForResult(intent,1);
 
         }
     };

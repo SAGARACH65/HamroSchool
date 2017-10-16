@@ -97,7 +97,7 @@ public class CommunicationFragment extends Fragment {
 
             }
         });
-        //TODO remove these invisiblility
+
 
 
 

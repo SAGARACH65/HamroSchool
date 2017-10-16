@@ -68,7 +68,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String PREF_NAME_HAS_INFO_SYNCED_FIRST_TIME = "HAS_INFO_SSYNCED_FIRST_TIME";
 
     private String received;
-    private String result;
+    private String result, result_ads, result_msg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,12 +89,12 @@ public class MainActivity extends AppCompatActivity {
             connect.execute("sagar");
 
 
+            MainActivity.ConnectToServerForMessages connect_msg = new MainActivity.ConnectToServerForMessages();
+            connect_msg.execute("sagar");
+
             MainActivity.ConnectToServerForAds connect_again = new MainActivity.ConnectToServerForAds();
             connect_again.execute("sagar");
 
-
-            MainActivity.ConnectToServerForMessages connect_msg = new MainActivity.ConnectToServerForMessages();
-            connect_msg.execute("sagar");
 
             SharedPreferences sharedPreferences = getSharedPreferences(PREF_NAME_FIRST_LOGIN, 0);
             SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -129,6 +129,13 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         DBReceiverForProfile dbp = new DBReceiverForProfile(getApplicationContext());
         String name = dbp.getData("School_Name");
+
+        try {
+            name = name.toUpperCase();
+        } catch (NullPointerException e) {
+
+        }
+
         TextView title_bar = (TextView) findViewById(R.id.mainToolBar);
         title_bar.setText(name);
 
@@ -149,8 +156,9 @@ public class MainActivity extends AppCompatActivity {
             DBReceiveTokenAndUserType rec = new DBReceiveTokenAndUserType(getApplicationContext());
             //1 is for getting token 2 is for getting user type
             String token = rec.getTokenAndLoginPersonType(1);
-           String urlll="http://www.hamroschool.net/myschoolapp/loginapi/messageservice.php?usertoken=";
+            String urlll = "http://www.hamroschool.net/myschoolapp/loginapi/messageservice.php?usertoken=";
             urlll = urlll + token;
+
             URL url = null;
             try {
                 url = new URL(urlll);
@@ -180,7 +188,7 @@ public class MainActivity extends AppCompatActivity {
 
                             in = new BufferedInputStream(urlConnection.getErrorStream());
                         }
-                        result = readStream(in);
+                        result_msg = readStream(in);
 
 
                     } finally {
@@ -198,10 +206,10 @@ public class MainActivity extends AppCompatActivity {
             XMLParserForMessages hp = new XMLParserForMessages(getApplicationContext());
 
             DataStoreInTokenAndUserType db_store = new DataStoreInTokenAndUserType(getApplicationContext());
-            db_store.storeXMLMSG(result, true, false);
+            db_store.storeXMLMSG(result_msg, true, false);
 
             try {
-                InputStream stream = new ByteArrayInputStream(result.getBytes());
+                InputStream stream = new ByteArrayInputStream(result_msg.getBytes());
                 hp.parse(stream);
 
             } catch (XmlPullParserException e) {
@@ -230,12 +238,6 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
-
-
-
-
-
 
 
     private void startServices() {
@@ -290,7 +292,7 @@ public class MainActivity extends AppCompatActivity {
                         }
 
                         //converting inputstream to string
-                        result = readStream(in);
+                        result_ads = readStream(in);
 
 
                     } finally {
@@ -308,7 +310,7 @@ public class MainActivity extends AppCompatActivity {
             XMLParserForAds hp = new XMLParserForAds(getApplicationContext());
 
             try {
-                InputStream stream = new ByteArrayInputStream(result.getBytes());
+                InputStream stream = new ByteArrayInputStream(result_ads.getBytes());
                 hp.parse(stream);
 
             } catch (XmlPullParserException e) {
@@ -420,7 +422,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             DBReceiverForProfile dbp = new DBReceiverForProfile(getApplicationContext());
-            String name = dbp.getData("School_Name");
+            String name = dbp.getData("School_Name").toUpperCase();
             TextView title_bar = (TextView) findViewById(R.id.mainToolBar);
             title_bar.setText(name);
 

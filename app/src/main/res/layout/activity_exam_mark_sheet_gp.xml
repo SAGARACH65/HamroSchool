@@ -53,63 +53,65 @@
     <ScrollView
         android:id="@+id/scrollview"
         android:layout_width="match_parent"
-        android:layout_height="190dp"
+        android:layout_height="wrap_content"
         android:layout_below="@id/info_bar">
 
-        <TableLayout
-            android:id="@+id/main_table"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:layout_marginStart="4dp">
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        </TableLayout>
+            <TableLayout
+                android:id="@+id/main_table"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="4dp"
+                android:layout_marginStart="4dp">
+
+            </TableLayout>
 
 
+            <TextView
+                android:id="@+id/GPA"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/main_table"
+                android:layout_marginTop="5dp"
+                android:gravity="start"
+                android:text="@string/cgpa"
+                android:textColor="#000000"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/GPA_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignEnd="@+id/GPA"
+                android:layout_alignTop="@+id/GPA"
+                android:textColor="#000000"
+
+                android:textSize="17sp" />
+
+            <TextView
+                android:id="@+id/comment"
+                android:layout_width="120dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_below="@+id/GPA"
+                android:gravity="start"
+                android:text="@string/comment"
+                android:textColor="#000000"
+                android:textSize="20sp" />
+
+
+            <TextView
+                android:id="@+id/comment_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/GPA_value"
+                android:layout_toEndOf="@+id/comment"
+                android:textColor="#000000"
+                android:textSize="17sp" />
+        </RelativeLayout>
     </ScrollView>
-
-    <TextView
-        android:id="@+id/GPA"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/scrollview"
-        android:layout_marginTop="5dp"
-        android:gravity="start"
-        android:text="@string/cgpa"
-        android:textColor="#000000"
-        android:textSize="20sp" />
-
-    <TextView
-        android:id="@+id/GPA_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/GPA"
-        android:layout_alignTop="@+id/GPA"
-        android:textColor="#000000"
-
-        android:textSize="17sp" />
-
-    <TextView
-        android:id="@+id/comment"
-        android:layout_width="120dp"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/GPA"
-        android:gravity="start"
-        android:text="@string/comment"
-        android:textColor="#000000"
-        android:textSize="20sp" />
-
-
-    <TextView
-        android:id="@+id/comment_value"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/GPA_value"
-        android:layout_toEndOf="@+id/comment"
-        android:textColor="#000000"
-        android:textSize="17sp" />
-
-
 </RelativeLayout>

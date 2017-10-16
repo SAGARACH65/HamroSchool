@@ -34,11 +34,13 @@ public class DBReceiverForMessages {
                 null, null, null, null
         );
 
-
+//int column_no=1;
         if (cursor.moveToFirst()) {
             do {
                 count++;
                 cursor.moveToNext();
+//               String  send = cursor.getString(column_no);
+//                column_no++;
 
             } while (!cursor.isAfterLast());
         }
