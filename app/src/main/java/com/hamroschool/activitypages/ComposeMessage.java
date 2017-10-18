@@ -50,7 +50,7 @@ public class ComposeMessage extends AppCompatActivity {
     private String urll = "http://hamroschool.net/myschoolapp/loginapi/messageupdateservice.php?action=msgupdate&usertoken=";
     private static String message_to = "&msg_to=";
     private static String message = "&msg=";
-
+    private Button myFab;
     private String result;
     private boolean failed = false;
 
@@ -61,6 +61,8 @@ public class ComposeMessage extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_compose_message);
 
+
+        myFab = (Button) findViewById(R.id.send);
         Toolbar toolbar;
         toolbar = (android.support.v7.widget.Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -100,15 +102,15 @@ public class ComposeMessage extends AppCompatActivity {
 
     private void setOnClickListenerForSendButton() {
 
-        Button myFab = (Button) findViewById(R.id.send);
+
         myFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
 
-
+                myFab.setClickable(false);
                 boolean isAvailable = Utility.isNetworkAvailable(ComposeMessage.this);
                 if (!isAvailable) {
                     Toast.makeText(getApplicationContext(), "No Internet Connection Available", Toast.LENGTH_LONG).show();
-
+                    myFab.setClickable(true);
                 } else {
 
                     Spinner spinner = (Spinner) findViewById(R.id.spinner);
@@ -117,12 +119,14 @@ public class ComposeMessage extends AppCompatActivity {
                     spinner_data_selected = spinner.getSelectedItem().toString();
                     message_written = et1.getText().toString();
 
-                  if(!message_written.equals("")) {
-                      ComposeMessage.sendDataToServer connect = new ComposeMessage.sendDataToServer();
-                      connect.execute("sagar");
-                  }else{
-                      Toast.makeText(getApplicationContext(), "Please Enter A Message", Toast.LENGTH_SHORT).show();
-                  }
+                    if (!message_written.equals("")) {
+                        ComposeMessage.sendDataToServer connect = new ComposeMessage.sendDataToServer();
+                        connect.execute("sagar");
+
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Please Enter A Message", Toast.LENGTH_SHORT).show();
+                        myFab.setClickable(true);
+                    }
                 }
             }
         });
@@ -163,7 +167,7 @@ public class ComposeMessage extends AppCompatActivity {
 
             String email = email_array.get(entryno);
 
-            message_written=message_written.replaceAll("\\s+", "%20");
+            message_written = message_written.replaceAll("\\s+", "%20");
             urll = urll + token + message_to + email + message + message_written;
             URL url = null;
 
@@ -224,7 +228,6 @@ public class ComposeMessage extends AppCompatActivity {
                     if (eventType == XmlPullParser.TEXT) {
                         String checker = parser.getText();
 
-
                         if (checker.equals("The message has been successfully sent.")) {
                             failed = false;
 
@@ -257,18 +260,17 @@ public class ComposeMessage extends AppCompatActivity {
 
             if (failed) {
                 Toast.makeText(getApplicationContext(), "Message Couldnot Be Send. Try Again Later", Toast.LENGTH_LONG).show();
+                myFab.setClickable(true);
             } else {
                 Toast.makeText(getApplicationContext(), "Message Was Successfully Send", Toast.LENGTH_LONG).show();
-
+                myFab.setClickable(true);
                 //setting the database again so that notification will not come for the user sent data
                 ComposeMessage.ConnectToServerForMessages connect_msg = new ComposeMessage.ConnectToServerForMessages();
                 connect_msg.execute("sagar");
 
-
                 Intent returnIntent = new Intent();
                 setResult(Activity.RESULT_OK, returnIntent);
                 finish();
-
 
             }
         }
@@ -345,7 +347,6 @@ public class ComposeMessage extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-
             XMLParserForMessages hp = new XMLParserForMessages(getApplicationContext());
 
             DataStoreInTokenAndUserType db_store = new DataStoreInTokenAndUserType(getApplicationContext());
@@ -374,7 +375,6 @@ public class ComposeMessage extends AppCompatActivity {
             return (result.toString());
         }
 
-
         @Override
         protected void onPostExecute(String s) {
 
@@ -386,17 +386,21 @@ public class ComposeMessage extends AppCompatActivity {
 
         Spinner spinner = (Spinner) findViewById(R.id.spinner);
 
-        ArrayList<String> spinnerArray = NameOfTeachers.getNameOfTeachers(getApplicationContext());
+
+        ArrayList<String> spinnerArray = new ArrayList<>();
+
+        if (name_of_teacher.equals("Not Listed")) {
+            spinnerArray = NameOfTeachers.getNameOfTeachers(getApplicationContext());
+
+        } else {
+            spinnerArray = new ArrayList<>();
+            spinnerArray.add(name_of_teacher);
+        }
 
         ArrayAdapter<String> adapter = new ArrayAdapter<String>(
                 this, android.R.layout.simple_spinner_item, spinnerArray);//selected item will look like a spinner set from XML
 
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        if (!name_of_teacher.equals("Not Listed")) {
-            int i = adapter.getPosition(name_of_teacher);
-            spinner.setSelection(adapter.getPosition(name_of_teacher));
-        }
         spinner.setAdapter(adapter);
 
     }

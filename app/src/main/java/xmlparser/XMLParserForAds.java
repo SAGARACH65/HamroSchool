@@ -24,7 +24,8 @@ public class XMLParserForAds {
     private boolean complete_flag = false;
     private Context mContext;
     private byte[] ad_byte_array;
-private boolean is_Network_lost=false;
+    private boolean is_Network_lost = false;
+
     public XMLParserForAds(Context mContext) {
         this.mContext = mContext;
     }
@@ -65,59 +66,63 @@ private boolean is_Network_lost=false;
     private void readAdvertisement(XmlPullParser parser) throws IOException, XmlPullParserException {
 
 
-            String ad = null, redirect = null;
-            parser.require(XmlPullParser.START_TAG, ns, "ads");
+        String ad = null, redirect = null;
+        parser.require(XmlPullParser.START_TAG, ns, "ads");
+        parser.next();
+
+        int i = 0;
+
+        String tagName = parser.getName();
+        while (!tagName.equals("ads")) {
             parser.next();
+            tagName = parser.getName();
 
-            int i = 0;
-
-            String tagName = parser.getName();
-            while (!tagName.equals("ads")) {
+            while (!tagName.equals("ad")) {
+                ad = readText(parser);
                 parser.next();
-                tagName = parser.getName();
 
-                while (!tagName.equals("ad")) {
-                    ad = readText(parser);
-                    parser.next();
-
-                    ConvertToByteArray convert = new ConvertToByteArray();
+                ConvertToByteArray convert = new ConvertToByteArray();
 //checking if network is lost before converting ads into bitmap
-                    boolean is_Network_Available= Utility.isNetworkAvailable(mContext);
-                    if(is_Network_Available) {
+                boolean is_Network_Available = Utility.isNetworkAvailable(mContext);
+               //TODO Check if this is correct
+                try {
+                    if (is_Network_Available) {
+
                         ad_byte_array = convert.getLogoImage(ad);
-                    }else{
-                      is_Network_lost=true;
+                    } else {
+                        is_Network_lost = true;
                     }
 
                     redirect = readText(parser);
                     parser.next();
                     tagName = parser.getName();
+                } catch (Exception e) {
+                    is_Network_lost = true;
+                }
+            }
+            parser.next();
+            tagName = parser.getName();
+            DBStoreCachedImages dsa = new DBStoreCachedImages(mContext);
+
+            //if network is lost during the entry we do not store the data
+            if (!is_Network_lost) {
+                if (i == 0) {
+                    dsa.storeAdlinks(ad_byte_array, redirect, true, false);
+
+                    i++;
+                    SharedPreferences has_ads_synced = mContext.getSharedPreferences(PREF_NAME_ADS_SYNCED, 0);
+                    SharedPreferences.Editor editor2 = has_ads_synced.edit();
+                    editor2.putBoolean("hasSynced", true);
+                    editor2.apply();
+                } else {
+                    dsa.storeAdlinks(ad_byte_array, redirect, false, false);
 
                 }
-                parser.next();
-                tagName = parser.getName();
-                DBStoreCachedImages dsa = new DBStoreCachedImages(mContext);
-
-             //if network is lost during the entry we do not store the data
-              if(!is_Network_lost) {
-                  if (i == 0) {
-                      dsa.storeAdlinks(ad_byte_array, redirect, true, false);
-
-                      i++;
-                      SharedPreferences has_ads_synced = mContext.getSharedPreferences(PREF_NAME_ADS_SYNCED, 0);
-                      SharedPreferences.Editor editor2 = has_ads_synced.edit();
-                      editor2.putBoolean("hasSynced", true);
-                      editor2.apply();
-                  } else {
-                      dsa.storeAdlinks(ad_byte_array, redirect, false, false);
-
-                  }
-              }
-              else{
-                  is_Network_lost=false;
-              }
+            } else {
+                is_Network_lost = false;
             }
-            complete_flag = true;
+        }
+        complete_flag = true;
 
 
     }

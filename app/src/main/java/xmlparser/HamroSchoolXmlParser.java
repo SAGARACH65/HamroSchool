@@ -27,6 +27,7 @@ public class HamroSchoolXmlParser {
     private static final String ns = null;
     private Context mContext;
     private boolean complete_flag = false;
+    private boolean doadd = true;
 
     // We don't use namespaces
     public HamroSchoolXmlParser(Context context) {
@@ -52,7 +53,7 @@ public class HamroSchoolXmlParser {
     //this is called by the service directly
     private void readFeed(XmlPullParser parser) throws XmlPullParserException, IOException {
 
-        String name ;
+        String name;
 
         while (parser.next() != XmlPullParser.END_TAG) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -343,16 +344,28 @@ public class HamroSchoolXmlParser {
         byte[] byte_array;
         ConvertToByteArray cvb = new ConvertToByteArray();
         if (!photo_link.equals("")) {
+            try {
+                byte_array = cvb.getLogoImage(photo_link);
+                DataStoreInDBProfile dsp = new DataStoreInDBProfile(mContext);
+                dsp.storeStudenInfo(students_info, school_name, byte_array, true, false);
 
-            byte_array = cvb.getLogoImage(photo_link);
+            } catch (Exception e) {
+
+            }
         } else {
             photo_link = "https://dabble.co/assets/fallback/default_user_photo-5cf83e232ebc4a1bab67fb6bf24fa1d1da9b603af2a2bc8e98c6d4c2d015d107.png";
-            byte_array = cvb.getLogoImage(photo_link);
+            try {
+                byte_array = cvb.getLogoImage(photo_link);
+                DataStoreInDBProfile dsp = new DataStoreInDBProfile(mContext);
+                dsp.storeStudenInfo(students_info, school_name, byte_array, true, false);
+            } catch (Exception e) {
+
+            }
         }
         parser.next();
 
-        DataStoreInDBProfile dsp = new DataStoreInDBProfile(mContext);
-        dsp.storeStudenInfo(students_info, school_name, byte_array, true, false);
+
+
 
     }
 

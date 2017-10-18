@@ -164,7 +164,7 @@ public class TeacherAttendence extends AppCompatActivity {
     private void showDialogBox() {
         new AlertDialog.Builder(this)
                 .setTitle("Confirm")
-                .setMessage("Press Yes To Confirm")
+                .setMessage("Press OK To Confirm")
                 .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
 
                     public void onClick(DialogInterface dialog, int whichButton) {
@@ -290,7 +290,7 @@ public class TeacherAttendence extends AppCompatActivity {
                         finish();
                         startActivity(getIntent());
                     }
-                }, 1000);
+                }, 10);
 
 
             }

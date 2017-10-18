@@ -51,8 +51,6 @@ public class MessagesList extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
-
-
         FloatingActionButton myFab = (FloatingActionButton) findViewById(R.id.fab);
         myFab.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -64,7 +62,7 @@ public class MessagesList extends AppCompatActivity {
 
 
                 intent.putExtras(extras);
-                startActivityForResult(intent,1);
+                startActivityForResult(intent, 1);
             }
         });
 
@@ -172,7 +170,7 @@ public class MessagesList extends AppCompatActivity {
             extras.putString("message_list", msg_list);
 
             intent.putExtras(extras);
-            startActivityForResult(intent,1);
+            startActivityForResult(intent, 1);
 
         }
     };

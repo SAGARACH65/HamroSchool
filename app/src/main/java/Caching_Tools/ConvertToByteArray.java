@@ -3,6 +3,8 @@ package Caching_Tools;
 import android.content.Context;
 import android.util.Log;
 
+import com.hamroschool.activitypages.ExamMarkSheetGPA;
+
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
@@ -17,10 +19,10 @@ import utility.Utility;
 
 public class ConvertToByteArray {
 
-    public byte[] getLogoImage(String url) {
+    public byte[] getLogoImage(String url) throws Exception {
 
 
-        try {
+//        try {
 
             URL imageUrl = new URL(url);
             URLConnection ucon = imageUrl.openConnection();
@@ -39,10 +41,10 @@ public class ConvertToByteArray {
 
             return baos.toByteArray();
 
-        } catch (Exception e) {
-            Log.d("ConvertToByteArray", "Error: " + e.toString());
-        }
+//        } catch (Exception e) {
+//            Log.d("ConvertToByteArray", "Error: " + e.toString());
+//        }
 
-        return null;
+
     }
 }
