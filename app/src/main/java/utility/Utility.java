@@ -17,7 +17,3 @@ public class Utility {
         return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
-//http://thenetwebs.com/myschoolapp/schoolapp/loginapi/getstudentdetails.php?usertoken=c44cbef5621fd6cc
-//      http://thenetwebs.com/myschoolapp/schoolapp/loginapi/studentlogin.php
-
-// 

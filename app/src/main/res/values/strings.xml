@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BCL School</string>
+    <string name="app_name">Hamro School</string>
 
     <string name="Exams">EXAMS</string>
     <string name="profile">PROFILE</string>
@@ -86,14 +86,21 @@
     <string name="gpa">GPA</string>
 
 
-
     <string name="message_history">Message History</string>
     <string name="messgae_list">Message List</string>
     <string name="compose_message">Compose Message</string>
-    
-    
+
+
     <string name="to">To:</string>
     <string name="c_message">Message:</string>
     <string name="send">SEND</string>
     <string name="hint">Enter Your Message Here</string>
+    <string name="title_activity_navigation_fragment">NavigationFragment</string>
+
+
+<string name="feedbacks">Suggestions/Feedback</string>
+    <string name="dev_profile">Developer\'s Profile</string>
+<string name="rate_us">Rate Us</string>
+
+
 </resources>

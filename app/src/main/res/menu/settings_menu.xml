@@ -9,5 +9,42 @@
 
         app:showAsAction="ifRoom"
 
+        android:orderInCategory="100"
+
+
+        />
+
+    <item
+
+        android:id="@+id/feedbacks"
+        android:title="@string/feedbacks"
+
+
+        app:showAsAction="ifRoom"
+
+        android:orderInCategory="200"
+
+        />
+    <!--<item-->
+
+    <!--android:id="@+id/dev_profile"-->
+    <!--android:title="@string/dev_profile"-->
+
+
+    <!--app:showAsAction="ifRoom"-->
+
+    <!--android:orderInCategory="300"-->
+
+    <!--/>-->
+    <item
+
+        android:id="@+id/rate_us"
+        android:title="@string/rate_us"
+
+
+        app:showAsAction="ifRoom"
+
+        android:orderInCategory="300"
+
         />
 </menu>

@@ -84,7 +84,7 @@ public class XMLParserForAds {
                 ConvertToByteArray convert = new ConvertToByteArray();
 //checking if network is lost before converting ads into bitmap
                 boolean is_Network_Available = Utility.isNetworkAvailable(mContext);
-               //TODO Check if this is correct
+
                 try {
                     if (is_Network_Available) {
 

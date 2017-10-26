@@ -72,7 +72,11 @@
         <activity android:name=".ExamMarkSheetGPA" />
         <activity android:name=".MessagesList" />
         <activity android:name=".MessgesHistory" />
-        <activity android:name=".ComposeMessage"></activity>
+        <activity android:name=".ComposeMessage" />
+        <activity
+            android:name="com.hamroschool.hamroschool.NavigationFragment"
+            android:label="@string/title_activity_navigation_fragment"
+            android:theme="@style/AppMaterialTheme"></activity>
     </application>
 
 </manifest>

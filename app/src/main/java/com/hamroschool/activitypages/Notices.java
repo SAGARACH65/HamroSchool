@@ -55,7 +55,7 @@ public class Notices extends AppCompatActivity {
 
         for (int i = 0; i < count; i++) {
             TableRow row = new TableRow(this);
-            row.setId(1000 + i);
+            row.setId( i);
             row.setOnClickListener(mlistner);
             //set the color only for the fields in odd places
             if (i % 2 != 0) {
@@ -172,7 +172,7 @@ public class Notices extends AppCompatActivity {
     View.OnClickListener mlistner = new View.OnClickListener() {
 
         public void onClick(View v) {
-            m_clicked_positon = v.getId() - 1000;
+            m_clicked_positon = v.getId() ;
 
             DBReceiverForNotices received = new DBReceiverForNotices(getApplicationContext());
             String message = received.getData(m_clicked_positon + 1, 2);

@@ -355,7 +355,7 @@ public class TeacherAttendence extends AppCompatActivity {
             checkbox.setWidth(dp);
 
 
-            checkbox.setId(1000 + i);
+            checkbox.setId( i);
             checkbox.setOnClickListener(mlistner);
 
             row.addView(textview1);
@@ -396,7 +396,7 @@ public class TeacherAttendence extends AppCompatActivity {
         public void onClick(View v) {
             //if token changed logout
             checkIfLoggedIn();
-            m_clicked_positon = v.getId() - 1000;
+            m_clicked_positon = v.getId() ;
 
             if (attendance_record.get(m_clicked_positon).equals("0")) {
 

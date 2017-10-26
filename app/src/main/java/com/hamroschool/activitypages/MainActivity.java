@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 
 
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.design.widget.TabLayout;
@@ -117,6 +118,8 @@ public class MainActivity extends AppCompatActivity {
         //startservices
         startServices();
 
+
+        //shows back button in toolbar
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
 
@@ -558,6 +561,24 @@ public class MainActivity extends AppCompatActivity {
                 intent.addCategory(Intent.CATEGORY_HOME);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+                return true;
+
+
+            case R.id.feedbacks:
+                //for feedbacks
+                Intent intent_email = new Intent(Intent.ACTION_VIEW, Uri.parse("mailto:" + "sagarach65@gmail.com"));
+                intent_email.putExtra(Intent.EXTRA_SUBJECT, "Regarding HamroSchool App");
+                startActivity(intent_email);
+                return  true;
+
+
+            case R.id.rate_us:
+                final String appPackageName = getPackageName(); // getPackageName() from Context or Activity object
+                try {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + appPackageName)));
+                } catch (android.content.ActivityNotFoundException anfe) {
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + appPackageName)));
+                }
                 return true;
             default:
                 // If we got here, the user's action was not recognized.
